@@ -1,0 +1,226 @@
+body.pricelist-active {
+  margin: 0;
+  padding: 0;
+  background: #0a0a0a;
+  color: #ffd900;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.pricelist-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* Left & right panel */
+.pricelist-container .left,
+.pricelist-container .right {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.pricelist-container .left {
+  background: rgb(39, 33, 0);
+}
+
+.pricelist-container .right {
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px;
+  padding-left: 50px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Title zone */
+.title-zone {
+  height: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+}
+
+.title {
+  color: #ffd900;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Picker */
+.picker-zone {
+  padding-top: 175px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.picker {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.picker-item {
+  color: #ffd900;
+  font-size: clamp(3rem, 8vw, 90px);
+  font-weight: 100;
+  text-align: center;
+  margin: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Details */
+#details {
+  padding-left: 100px;
+  padding-top: 250px;
+  max-width: 1000px;
+  text-align: left;
+  opacity: 0;
+  flex: 1;
+}
+
+.price {
+  font-size: clamp(2.5rem, 8vw, 72px);
+  font-weight: 700;
+  color: #ffd900;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+  word-wrap: break-word;
+}
+
+#details ul {
+  list-style: none;
+  padding-left: 100px; /* sejajar sama price */
+  margin: 0;
+}
+
+#details ul li {
+  font-size: clamp(1.2rem, 3vw, 28px);
+  font-weight: 400;
+  color: #fff;
+  margin: 12px 0;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+#details ul li span {
+  color: #ffd900;
+  font-weight: bold;
+}
+
+/* Notes */
+.notes {
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+  color: #ffd900;
+  margin-top: auto;
+  padding-left: 100px;
+  padding-bottom: 150px;
+  max-width: 800px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 1024px) {
+  .pricelist-container {
+    flex-direction: column;
+  }
+
+  .pricelist-container .left,
+  .pricelist-container .right {
+    width: 100%;
+    height: auto;
+  }
+
+  .pricelist-container .left {
+    height: 50vh;
+  }
+
+  .title-zone {
+    height: auto;
+    padding-top: 5vh;
+  }
+
+  .picker-zone {
+    padding-top: 50px;
+  }
+
+  .picker-item {
+    font-size: clamp(2.5rem, 10vw, 5rem);
+  }
+
+  .pricelist-container .right {
+    padding: 2rem;
+    min-height: 50vh;
+  }
+
+  #details {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .price {
+    font-size: clamp(2rem, 8vw, 4rem);
+    margin-bottom: 20px;
+  }
+
+  #details ul {
+    padding-left: 0;
+  }
+
+  #details ul li {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    margin: 8px 0;
+  }
+
+  .notes {
+    padding: 0;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    max-width: 100%;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .pricelist-container .right {
+    padding: 1rem;
+    padding-top: 80px; /* Account for mobile navbar */
+  }
+
+  .title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+
+  .picker-item {
+    font-size: clamp(2rem, 12vw, 4rem);
+  }
+
+  .price {
+    font-size: clamp(1.5rem, 8vw, 3rem);
+  }
+
+  #details ul li {
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
+  }
+}

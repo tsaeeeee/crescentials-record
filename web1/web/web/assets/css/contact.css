@@ -1,0 +1,136 @@
+/* ================= CONTACT SECTION ================= */
+.contact-section {
+  position: absolute;     
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+
+  padding: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: flex-start;     
+  background: rgba(0, 0, 0, 0); /* sementara */
+  color: #ffd900;   /* sementara gold vibe */
+}
+
+.contact-section.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+/* Small title */
+.contact-section .subtitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  opacity: 0.8;
+}
+
+/* Main Heading */
+.contact-section h1 {
+  font-size: clamp(3rem, 8vw, 100px);  
+  font-weight: 700;
+  text-align: left;
+  line-height: 1.2;
+  max-width: 100%;
+  margin: 0 0 150px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Buttons wrapper */
+.contact-items {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 30px;
+}
+
+.contact-items .row {
+  display: flex;
+  gap: 7px;
+  justify-content: flex-start;
+}
+
+.contact-items a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  color: #ffd900;
+  border: 1px solid #ffd900;
+  padding: 30px 5px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.contact-items a:hover {
+  background: #ffd900;
+  color: #111;
+}
+
+/* Footer copyright */
+.contact-section .footer {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-top: 75px;
+  text-align: left;
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 768px) {
+  .contact-section {
+    padding: 80px 2rem 2rem;
+    justify-content: flex-start;
+  }
+
+  .contact-section h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    margin-bottom: 3rem;
+    line-height: 1.3;
+  }
+
+  .contact-items {
+    max-width: 100%;
+  }
+
+  .contact-items .row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .contact-items a {
+    padding: 20px 15px;
+    font-size: 16px;
+  }
+
+  .contact-section .footer {
+    margin-top: 3rem;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .contact-section {
+    padding: 80px 1rem 1rem;
+  }
+
+  .contact-section h1 {
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
+    margin-bottom: 2rem;
+  }
+
+  .contact-items a {
+    padding: 15px 10px;
+    font-size: 14px;
+  }
+}

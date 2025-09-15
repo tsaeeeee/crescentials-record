@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <!--=============== REMIXICONS ===============-->
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="assets/css/styles.css">
+        <link rel="stylesheet" href="assets/css/artist.css">
+        <link rel="stylesheet" href="assets/css/pricelist.css">
+        <link rel="stylesheet" href="assets/css/contact.css">
+
+        <link rel="icon" type="image/png" href="assets/img/Crescentials Record - Favicon.png">
+
+        <title>Crescentials Record</title>
+
+        <!--=============== MAIN JS ===============-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/siriwave@2.0.5/dist/siriwave.umd.min.js"></script>
+        <script src="assets/js/main.js" defer></script>
+       
+    </head>
+    <body>
+        <style>
+            /* DESKTOP NAVIGATION CONSISTENCY */
+            @media screen and (min-width: 769px) {
+                .nav {
+                    width: 60px !important;
+                    height: max-content !important;
+                    position: fixed !important;
+                    inset: 0 !important;
+                    margin: auto 0 !important;
+                    z-index: 9999 !important;
+                }
+                .nav__list {
+                    position: relative !important;
+                    background-color: var(--first-color) !important;
+                    padding-block: 25px !important;
+                    border-radius: 0 !important;
+                    display: grid !important;
+                    justify-content: center !important;
+                    row-gap: 2rem !important;
+                }
+                .nav__link {
+                    position: relative !important;
+                    display: inline-flex !important;
+                    padding: 2px !important;
+                    border-radius: 50% !important;
+                    transition: background 0.4s !important;
+                    background: transparent !important;
+                }
+                .nav__link:hover {
+                    background: rgba(17, 17, 17, 0.1) !important;
+                }
+                .nav__link.active-link {
+                    background-color: var(--white-color) !important;
+                }
+                .nav__link i {
+                    font-size: 1.5rem !important;
+                    color: var(--white-color) !important;
+                    transition: color 0.4s !important;
+                }
+                .nav__link.active-link i {
+                    color: var(--first-color) !important;
+                }
+            }
+            
+            /* FORCE MOBILE NAVIGATION */
+            @media screen and (max-width: 768px) {
+                .nav {
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    width: 100% !important;
+                    height: 60px !important;
+                    z-index: 99999 !important;
+                    inset: unset !important;
+                    margin: 0 !important;
+                }
+                .nav__list {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    justify-content: space-around !important;
+                    align-items: center !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    background: #ffd900 !important;
+                    border-radius: 0 !important;
+                }
+                .nav__link {
+                    flex: 1 !important;
+                    display: flex !important;
+                    justify-content: center !important;
+                    align-items: center !important;
+                    border-radius: 0 !important;
+                    width: auto !important;
+                    height: auto !important;
+                    margin: 0 !important;
+                    padding: 8px !important;
+                    background: transparent !important;
+                    transition: none !important;
+                }
+                .nav__link:hover {
+                    background: transparent !important;
+                }
+                .nav__link.active-link {
+                    background-color: transparent !important;
+                }
+                .nav__link i {
+                    font-size: 1.5rem !important;
+                    color: #111111 !important;
+                    transition: all 0.4s ease !important;
+                    padding: 10px !important;
+                    border-radius: 50% !important;
+                    background: transparent !important;
+                    width: 45px !important;
+                    height: 45px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+                .nav__link:hover i {
+                    background: rgba(17, 17, 17, 0.1) !important;
+                }
+                .nav__link.active-link i {
+                    color: #ffd900 !important;
+                    background: #111111 !important;
+                }
+                .nav__name {
+                    display: none !important;
+                }
+                .side-label {
+                    position: fixed !important;
+                    bottom: 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    width: 100% !important;
+                    writing-mode: horizontal-tb !important;
+                    text-align: center !important;
+                    padding: 12px 20px !important;
+                    background: #ffd900 !important;
+                    z-index: 99999 !important;
+                    transform: none !important;
+                    margin: 0 !important;
+                    height: auto !important;
+                    font-size: 12px !important;
+                    font-weight: 600 !important;
+                    color: #111 !important;
+                    white-space: nowrap !important;
+                    overflow: hidden !important;
+                    text-overflow: ellipsis !important;
+                }
+                
+                /* Hide decorative elements */
+                .nav__circle-1, .nav__circle-2, .nav__square-1, .nav__square-2 {
+                    display: none !important;
+                }
+                
+                /* Adjust content for mobile bars */
+                .section {
+                    padding-top: 70px !important;
+                    padding-bottom: 50px !important;
+                }
+                .landing-section {
+                    padding-top: 80px !important;
+                    padding-bottom: 60px !important;
+                }
+            }
+        </style>
+        <!--PRELOADER-->
+        <div id="preloader">
+            <svg class="crescsvg" viewBox="0 0 2500 2500" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(0.000000,2500.000000) scale(0.100000,-0.100000)" fill="none" stroke="aqua" stroke-width="100">
+                <path d="M12155 21639 c-1462 -56 -2900 -486 -4164 -1246 -982 -590 -1826 -1353 -2509 -2268 -1275 -1707 -1889 -3861 -1707 -5983 214 -2497 1486 -4786 3488 -6278 1810 -1350 4080 -1950 6327 -1673 717 88 1459 278 2130 544 1526 606 2834 1605 3808 2910 1275 1707 1889 3861 1707 5983 -127 1479 -619 2883 -1444 4122 -555 833 -1245 1560 -2044 2156 -1312 979 -2860 1565 -4507 1708 -192 17 -652 37 -795 34 -49 0 -180 -5 -290 -9z m1980 -593 c1329 -132 2482 -535 3550 -1240 266 -176 694 -499 746 -563 8 -9 -42 28 -111 83 -400 318 -813 580 -1285 814 -298 149 -493 233 -775 335 -1492 542 -3148 579 -4660 104 -1633 -512 -3044 -1588 -3960 -3019 -654 -1021 -1043 -2192 -1135 -3415 -18 -233 -20 -777 -5 -1000 110 -1617 729 -3111 1794 -4335 131 -151 449 -473 606 -614 1145 -1031 2598 -1673 4140 -1830 520 -53 1158 -46 1665 19 1095 141 2138 528 3075 1140 823 537 1529 1240 2075 2065 524 791 889 1680 1074 2616 171 859 185 1788 40 2621 -11 63 -18 120 -16 126 2 6 17 -73 35 -174 236 -1367 115 -2688 -365 -3994 -543 -1474 -1566 -2774 -2879 -3657 -1492 -1004 -3256 -1448 -5034 -1267 -1599 162 -3127 836 -4320 1907 -176 157 -497 482 -643 650 -1061 1217 -1712 2723 -1861 4312 -81 859 -16 1721 195 2563 600 2396 2292 4326 4597 5246 715 285 1500 463 2302 520 199 15 967 6 1155 -13z m757 -576 c1116 -76 2151 -413 3081 -1004 243 -154 604 -424 762 -571 28 -25 8 -12 -43 29 -1152 938 -2565 1427 -4022 1393 -290 -7 -416 -17 -685 -53 -1965 -261 -3695 -1476 -4605 -3236 -380 -736 -596 -1497 -671 -2363 -19 -209 -16 -751 5 -975 86 -951 372 -1829 854 -2630 674 -1119 1677 -1985 2877 -2485 1647 -685 3501 -623 5089 172 853 427 1583 1035 2154 1795 608 809 1009 1775 1156 2783 49 333 60 495 60 880 1 380 -7 519 -50 834 -13 101 -23 186 -21 188 6 5 54 -301 71 -452 87 -764 38 -1524 -144 -2265 -417 -1690 -1474 -3119 -2966 -4008 -791 -471 -1709 -776 -2624 -871 -310 -33 -758 -41 -1075 -21 -1257 82 -2471 533 -3474 1290 -1699 1283 -2668 3361 -2551 5470 40 717 194 1411 460 2076 86 215 297 646 410 839 759 1292 1914 2263 3319 2791 583 219 1274 365 1886 397 152 8 609 6 747 -3z m1058 -576 c1057 -98 2034 -491 2850 -1143 69 -55 150 -123 180 -151 30 -28 2 -8 -62 44 -691 559 -1525 924 -2410 1056 -421 62 -929 68 -1358 14 -780 -98 -1562 -399 -2215 -854 -1691 -1178 -2479 -3274 -1984 -5278 86 -353 190 -639 348 -967 113 -234 196 -378 347 -605 262 -395 552 -722 909 -1025 771 -655 1694 -1047 2735 -1162 218 -24 773 -24 990 0 541 60 1008 182 1482 388 866 374 1611 992 2137 1769 605 894 908 1974 853 3032 -7 128 -21 298 -31 378 -31 235 -33 257 -16 180 40 -187 73 -481 85 -755 55 -1334 -411 -2665 -1288 -3682 -137 -159 -441 -460 -587 -582 -1208 -1008 -2745 -1437 -4272 -1191 -845 136 -1658 481 -2348 997 -370 276 -733 635 -1020 1008 -332 433 -601 924 -789 1443 -276 759 -373 1589 -280 2397 98 859 422 1717 918 2433 427 616 1006 1153 1656 1537 959 566 2082 821 3170 719z m602 -454 c758 -51 1432 -268 2075 -668 140 -88 415 -289 498 -366 34 -32 18 -22 -48 28 -610 469 -1270 736 -2057 833 -168 20 -660 23 -830 5 -1052 -114 -1979 -594 -2664 -1377 -533 -611 -866 -1377 -968 -2230 -20 -169 -17 -734 5 -900 75 -562 240 -1062 505 -1530 71 -125 242 -379 336 -500 554 -706 1339 -1211 2220 -1425 342 -84 595 -113 961 -114 267 0 407 10 625 45 1295 204 2403 1010 2988 2174 217 431 341 842 409 1350 25 191 25 764 0 958 -20 148 -18 196 2 75 130 -785 42 -1609 -249 -2338 -556 -1391 -1767 -2394 -3240 -2684 -295 -58 -438 -70 -815 -71 -278 0 -380 4 -495 18 -857 107 -1606 420 -2264 947 -149 119 -416 377 -546 525 -587 676 -949 1497 -1057 2400 -25 210 -25 738 0 945 183 1515 1061 2776 2404 3449 677 339 1467 500 2205 451z m843 -451 c418 -40 850 -166 1235 -359 196 -99 403 -229 565 -355 132 -103 168 -141 53 -57 -449 333 -935 528 -1513 608 -179 25 -607 25 -782 1 -626 -87 -1167 -323 -1642 -716 -116 -95 -340 -324 -434 -441 -146 -182 -303 -434 -398 -637 -271 -581 -363 -1247 -258 -1878 136 -819 606 -1573 1279 -2052 442 -315 943 -506 1505 -575 161 -19 566 -16 730 6 465 63 871 204 1257 437 801 484 1346 1303 1488 2237 42 276 46 536 14 836 -8 76 -13 140 -11 143 5 4 27 -131 49 -297 20 -149 16 -634 -6 -795 -143 -1040 -682 -1916 -1526 -2480 -997 -666 -2238 -777 -3340 -298 -438 190 -846 481 -1168 833 -526 574 -843 1294 -913 2073 -25 274 -1 692 56 972 196 968 788 1809 1631 2312 490 294 1034 459 1629 497 90 6 375 -3 500 -15z m700 -430 c481 -55 948 -246 1333 -546 45 -35 82 -66 82 -69 0 -3 -26 15 -57 39 -119 91 -330 213 -473 273 -657 275 -1380 251 -2005 -66 -462 -234 -822 -599 -1050 -1065 -114 -232 -181 -449 -222 -715 -21 -141 -24 -491 -5 -625 62 -428 210 -791 465 -1135 93 -124 325 -356 455 -453 396 -296 851 -456 1347 -474 643 -23 1255 211 1718 657 382 367 624 843 703 1380 18 121 24 419 12 565 l-6 80 13 -75 c35 -198 37 -537 5 -748 -89 -575 -329 -1063 -720 -1466 -415 -427 -922 -686 -1525 -778 -111 -16 -186 -21 -360 -21 -245 0 -400 18 -620 72 -888 218 -1590 866 -1879 1735 -208 624 -170 1302 109 1918 225 498 650 953 1134 1212 488 261 1015 366 1546 305z m113 -850 c209 -23 368 -70 567 -169 681 -337 1040 -1111 855 -1845 -148 -590 -598 -1044 -1182 -1194 -999 -257 -1987 476 -2035 1510 -16 354 82 694 290 1004 83 123 293 332 417 414 334 223 716 321 1088 280z"/>
+                </g>
+            </svg>
+        </div>
+
+        <!--NAVBAR-->
+        <nav class="nav">   
+            <ul class="nav__list">
+                <a href="#Home" class="nav__link active-link">
+                    <i class="ri-moon-line"></i>
+                    <span class="nav__name">Home</span>
+                </a>
+
+                <a href="#About" class="nav__link">
+                    <i class="ri-eye-2-line"></i>
+                    <span class="nav__name">Preambul</span>
+                </a>
+
+                <a href="#Artists" class="nav__link">
+                    <i class="ri-disc-line"></i>
+                    <span class="nav__name">Artists & Releases</span>
+                </a>
+
+                <a href="#Pricelist" class="nav__link">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    <span class="nav__name">Pricelist</span>
+                </a>
+
+                <a href="#contact" class="nav__link">
+                    <i class="ri-chat-voice-line"></i>
+                    <span class="nav__name">Contact</span>
+                </a>
+            </ul>
+        </nav>
+
+        <!-- Contact Label -->
+        <div class="side-label">
+        Crescentials Record © 2025
+        </div>
+
+
+        <!--MAIN-->
+        <main class="landing">
+        
+        <!--Home-->
+        <section id="Home" class="section landing-section active">
+            <div class="logo-container">
+                <p class="tagline" id="animatedTagline">
+                    <span class="tagline-line">Create Music</span>
+                    <span class="tagline-line">with Essentials.</span>
+                </p>
+            </div>
+            <canvas id="waveCanvas"></canvas>
+        </section>
+
+        <!--About-->
+        <section id="About" class="section">
+            <div class="about-container">
+                <div class="about-left"></div>
+                
+                <div class="about-right">
+                    <div class="about-inner">
+                        <img class="about-img" src="../modern-sidebar-menu-main/assets/img/Crescentials Record - Horizontal.png" alt="">
+                        <p class="about-paragraph"><span style="font-weight: bold;">Crescentials Record</span>, a home-based music production studio since 2019, based in Indonesia, providing services for individuals who want to create their own single, as well as those who wish to develop their own EP/album.</p>
+                        <p class="about-paragraph"><span style="font-weight: bold;">We</span>, always aim to deliver the highest quality of music persona while maintaining affordable pricing for our services and packages.</p>
+                    </div>
+                    <canvas id="waveCanvasAbout"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!--Artist and Releases-->
+        <section id="Artists" class="section">
+            <div class="artist-container">
+                <!-- LEFT: Artist Details -->
+                <div class="artist-left" id="artistDetails">
+                <!-- Inject by JS -->
+                </div>
+
+                <!-- RIGHT: Artist Image + Navigation -->
+                <div class="artist-right">
+                    <div class="artist-image-container" id="artistImages"></div>
+                    <div class="artist-nav">
+                        <button id="prevBtn">&#10094;</button>
+                        <button id="nextBtn">&#10095;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricelist -->
+        <section id="Pricelist" class="section">
+            <div class="pricelist-container">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section contact-section">
+            <div class="subtitle">Let's Create!</div>
+            <h1>
+                Got a project in mind?<br>
+                Production, mix & master, or a custom idea<br>
+                — I’d love to hear from you.<br>
+            </h1>
+            <div class="contact-items">
+                <!-- Row 1 -->
+                <div class="row">
+                <a href="mailto:crescentialsmusic@gmail.com">crescentialsmusic@gmail.com</a>
+                <a href="tel:+628123456789">+62 812 3456789</a>
+                </div>
+                <!-- Row 2 -->
+                <div class="row">
+                <a href="#">instagram</a>
+                <a href="#">youtube</a>
+                <a href="#">spotify</a>
+                </div>
+            </div>
+
+            <!-- Footer copyright -->
+            <div class="footer">
+                © <span id="year"></span> Crescentials Record. All rights reserved.
+            </div>
+        </section>
+       
+        </main>
+    <script src="assets/js/artist.js"></script>
+    <script src="assets/js/pricelist.js"></script>
+    <script src="assets/js/contact.js"></script>
+    </body>
+</html>
