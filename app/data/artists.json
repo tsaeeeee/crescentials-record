@@ -1,0 +1,71 @@
+[
+  {
+    "name": "Yahya Fadhilah",
+    "bio": "Yahya (born May 4th, 2000) is the stage name of Yahya Fadhilah, an Indonesian singer-songwriter based in Bandung. His first introduction to music was at the age of 12 as an acoustic fingerstyle guitarist.",
+    "image": "/assets/images/edited/artis_yahya.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/yahyafadhilah/",
+      "spotify": "https://open.spotify.com/artist/2x49HGCVPqbRxecj0PZq2R?si=6CZc7CQ2RCivU9cjqjW-jA",
+      "youtube": "https://www.youtube.com/@Yahya2000"
+    },
+    "tracks": [
+      "https://open.spotify.com/embed/track/3Sbova9DAY3pc9GTAACT4b?si=99a3e285284843fe",
+      "https://open.spotify.com/embed/track/2XhXW3bXnbcowuWygaR26a?si=0eaa0f5b58af42f2",
+      "https://open.spotify.com/embed/track/1RwKF4H3Bq567IjRdwwYBq?si=c76540e3bc8149ea",
+      "https://open.spotify.com/embed/track/4iF9NHQR3Cki2nT3OkbzO8?si=c64e8ec1f0004b41"
+    ]
+  },
+  {
+    "name": "Pasha Qonia",
+    "bio": "Pasha Qonia, a 20-year-old solo artist, brings the nostalgic vibes of 90s digital vintage pop to the modern music scene. Pasha's sound is a harmonious blend of past and present. Her evolving musical focus captures the essence of retro pop while infusing it with a contemporary twist. Join Pasha on her musical journey and relive the golden era of pop with every track.",
+    "image": "/assets/images/edited/artis_pasha.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/pashaqonia/",
+      "spotify": "https://open.spotify.com/artist/4VoE0CKWr0aFfBrWLEFxqg?si=39d55ce8d7c24a46",
+      "youtube": "https://www.youtube.com/@pashaqonia"
+    },
+    "tracks": [
+      "https://open.spotify.com/embed/track/3cU9k4UYd1p8Hxq9x0y2g6?si=b95d8c4e8f5f4d9f",
+      "https://open.spotify.com/embed/track/2xH8W2bXnbcowuWygaR26b?si=1faa0f5b58af42g3"
+    ]
+  },
+  {
+    "name": "Reby Chandra",
+    "bio": "Reby Chandra is an emerging Indonesian artist who brings a fresh perspective to contemporary music. With a focus on heartfelt lyrics and melodic compositions, Reby creates music that resonates with listeners on a personal level.",
+    "image": "/assets/images/edited/artis_reby.png", 
+    "socials": {
+      "instagram": "https://www.instagram.com/rebychandra/",
+      "spotify": "https://open.spotify.com/artist/5VoE0CKWr0aFfBrWLEFxqh?si=49d55ce8d7c24b47",
+      "youtube": "https://www.youtube.com/@rebychandra"
+    },
+    "tracks": [
+      "https://open.spotify.com/embed/track/4dU9k4UYd1p8Hxq9x0y2g7?si=c95d8c4e8f5f4d9g"
+    ]
+  },
+  {
+    "name": "Tania Salsabila",
+    "bio": "Tania Salsabila is a talented vocalist and songwriter who brings emotional depth to her performances. Her music combines traditional Indonesian influences with contemporary production techniques.",
+    "image": "/assets/images/edited/artis_tania.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/taniasalsabila/",
+      "spotify": "https://open.spotify.com/artist/6VoE0CKWr0aFfBrWLEFxqi?si=59d55ce8d7c24b48", 
+      "youtube": "https://www.youtube.com/@taniasalsabila"
+    },
+    "tracks": [
+      "https://open.spotify.com/embed/track/5eU9k4UYd1p8Hxq9x0y2g8?si=d95d8c4e8f5f4d9h"
+    ]
+  },
+  {
+    "name": "Crescentials Record",
+    "bio": "Crescentials Record represents the studio's own musical projects and collaborations. This encompasses various experimental tracks and showcase pieces that demonstrate the studio's production capabilities.",
+    "image": "/assets/images/edited/artis_cresc.png",
+    "socials": {
+      "instagram": "https://www.instagram.com/crescentialsrecord/",
+      "spotify": "https://open.spotify.com/artist/7VoE0CKWr0aFfBrWLEFxqj?si=69d55ce8d7c24b49",
+      "youtube": "https://www.youtube.com/@crescentialsrecord"
+    },
+    "tracks": [
+      "https://open.spotify.com/embed/track/6fU9k4UYd1p8Hxq9x0y2g9?si=e95d8c4e8f5f4d9i"
+    ]
+  }
+]

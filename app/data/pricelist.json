@@ -1,0 +1,78 @@
+[
+  {
+    "id": "basic-single",
+    "name": "Basic Single Production",
+    "description": "Professional single track production with mixing and mastering",
+    "features": [
+      "Professional recording session",
+      "Audio editing and arrangement", 
+      "Mixing with EQ and effects",
+      "Basic mastering",
+      "2 revisions included"
+    ],
+    "price": {
+      "amount": 500000,
+      "currency": "IDR",
+      "period": "per song"
+    },
+    "popular": false
+  },
+  {
+    "id": "premium-single", 
+    "name": "Premium Single Production",
+    "description": "Complete single production with advanced mixing and mastering",
+    "features": [
+      "Professional recording session",
+      "Advanced audio editing",
+      "Professional mixing with premium plugins",
+      "Professional mastering",
+      "Unlimited revisions",
+      "High-quality WAV delivery"
+    ],
+    "price": {
+      "amount": 800000,
+      "currency": "IDR", 
+      "period": "per song"
+    },
+    "popular": true
+  },
+  {
+    "id": "ep-package",
+    "name": "EP Production Package",
+    "description": "Complete EP production (3-5 tracks) with full studio services",
+    "features": [
+      "Full EP recording sessions",
+      "Professional arrangement",
+      "Premium mixing and mastering",
+      "Album artwork design consultation",
+      "Distribution preparation",
+      "Unlimited revisions"
+    ],
+    "price": {
+      "amount": 2500000,
+      "currency": "IDR",
+      "period": "per project"
+    },
+    "popular": false
+  },
+  {
+    "id": "album-production",
+    "name": "Full Album Production", 
+    "description": "Complete album production with comprehensive studio services",
+    "features": [
+      "Full album recording sessions (8-12 tracks)",
+      "Professional arrangement and composition help",
+      "Premium mixing and mastering for all tracks",
+      "Album artwork design",
+      "Distribution and streaming platform preparation", 
+      "Marketing consultation",
+      "Unlimited revisions throughout process"
+    ],
+    "price": {
+      "amount": 5000000,
+      "currency": "IDR",
+      "period": "per project"
+    },
+    "popular": false
+  }
+]

@@ -1,0 +1,491 @@
+.artist-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  align-items: stretch;
+}
+
+/* Left Section */
+.artist-left {
+  width: 50%;
+  padding: 100px;
+  overflow-y: auto;
+  background: #ffd900;
+  position: relative;
+}
+
+.artist-content {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.artist-left h2 { 
+  font-size: clamp(2.5rem, 6vw, 5rem); 
+  margin-bottom: 25px; 
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.artist-left p { 
+  font-size: 1.2rem; 
+  margin-bottom: 20px; 
+  line-height: 1.4; 
+  text-align: left;
+}
+
+.socials {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 40px; /* space bawah sebelum release */
+}
+.socials a {
+  font-size: 1.5rem;
+  color: #111;
+  text-decoration: none;
+  transition: color 0.3s, transform 0.2s;
+  margin-bottom: 50px; /* space sebelum releases */
+}
+.socials a:hover {
+  color: #bda000;
+  transform: scale(1.1);
+}
+
+.releases-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.artist-left iframe {
+  width: 100%;
+  height: 152px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.spotify-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: stretch;
+}
+
+.spotify-track-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: transparent;
+  transition: none;
+  width: 100%;
+  height: 152px;
+  box-sizing: border-box;
+}
+
+.spotify-skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 152px;
+  background: #ffffff;
+  border-radius: 12px;
+  z-index: 2;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  gap: 16px;
+}
+
+.skeleton-album-art {
+  width: 112px;
+  height: 112px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f5e55a 25%, #ffd900 50%, #f5e55a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.skeleton-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  padding-right: 16px;
+}
+
+.skeleton-track-title {
+  height: 20px;
+  width: 80%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f5e55a 25%, #ffd900 50%, #f5e55a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 4px;
+}
+
+.skeleton-artist-name {
+  height: 16px;
+  width: 60%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f5e55a 25%, #ffd900 50%, #f5e55a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 8px;
+}
+
+.skeleton-playback-bar {
+  height: 4px;
+  width: 90%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #f5e55a 25%, #ffd900 50%, #f5e55a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-play-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.skeleton-play-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #f5e55a 25%, #ffd900 50%, #f5e55a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-more-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #f5e55a 25%, #ffd900 50%, #f5e55a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Remove old skeleton styles */
+.skeleton-content,
+.skeleton-avatar,
+.skeleton-text,
+.skeleton-line,
+.skeleton-title,
+.skeleton-artist,
+.skeleton-album,
+.skeleton-controls,
+.skeleton-play-button,
+.skeleton-progress {
+  display: none !important;
+}
+
+/* Remove old loading styles */
+.spotify-loading,
+.loading-placeholder,
+.loading-spinner {
+  display: none !important;
+}
+
+/* Fix Spotify embed controls alignment with CSS-only approach */
+.spotify-track-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: transparent;
+  transition: none;
+  width: 100%;
+  height: 152px;
+  box-sizing: border-box;
+}
+
+.spotify-track-wrapper iframe {
+  width: 100%;
+  height: 152px;
+  border: none;
+  border-radius: 12px;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Right Section */
+.artist-right {
+  width: 50%;
+  height: 100vh !important;
+  background: rgba(0,0,0,0);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.artist-image-container {
+  width: 100%;
+  height: 100vh !important;
+  position: relative;
+  transform: translateZ(0); /* Enable hardware acceleration */
+}
+.artist-image-container img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  object-fit: contain;
+  opacity: 0;
+  backface-visibility: hidden; /* Prevent flicker */
+  transform: translateZ(0); /* Hardware acceleration */
+  transition: opacity 0.3s ease; /* Fallback transition */
+}
+.artist-image-container img.active { 
+  opacity: 1; 
+}
+
+/* Tablet & Mobile */
+@media (max-width: 1024px) {
+  .artist-container {
+    flex-direction: column;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
+
+  .artist-left, 
+  .artist-right {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .artist-left {
+    padding: 2rem;
+    min-height: 50vh;
+    box-sizing: border-box;
+  }
+
+  .spotify-tracks {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .spotify-track-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+
+  .spotify-skeleton {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .artist-left h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 20px;
+  }
+
+  .artist-left p {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    margin-bottom: 15px;
+  }
+
+  .releases-label {
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    margin-bottom: 15px;
+  }
+
+  .artist-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    height: 50vh;
+  }
+
+  .artist-image-container img {
+    position: relative;
+    max-width: 90%;
+    max-height: 400px;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 768px) {
+  .artist-container {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
+
+  .artist-left {
+    padding: 1.5rem;
+    padding-top: 80px; /* Account for mobile navbar */
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .spotify-tracks {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .spotify-track-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+
+  .spotify-skeleton {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+  }
+
+  .skeleton-album-art {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+  }
+
+  .skeleton-play-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .skeleton-more-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  .artist-left h2 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+  }
+
+  .artist-image-container {
+    height: 40vh;
+    min-height: 300px;
+    width: 100%;
+  }
+
+  .artist-nav {
+    bottom: 20px;
+  }
+
+  .artist-nav button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Navigation Buttons */
+.artist-nav {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  z-index: 10;
+}
+.artist-nav button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 217, 0, 0.2);
+  backdrop-filter: blur(3px);
+  border: 1px solid #ffd900;
+  color: #ffd900;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.artist-nav button:hover {
+  background: rgba(255, 217, 0, 0.6);
+  color: #111;
+  box-shadow: 0 6px 25px rgba(255, 217, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.artist-nav button:active {
+  transform: translateY(0);
+}
+
+.artist-nav button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Khusus area kiri */
+.artist-left {
+  overflow-y: auto;
+
+  /* Firefox */
+  scrollbar-width: thin;             /* slim */
+  scrollbar-color: transparent transparent; /* awalnya hidden */
+}
+
+/* Chrome, Safari, Edge */
+.artist-left::-webkit-scrollbar {
+  width: 8px; /* slim */
+}
+
+.artist-left::-webkit-scrollbar-track {
+  background: transparent; /* ilangin putihnya */
+}
+
+.artist-left::-webkit-scrollbar-thumb {
+  background-color: transparent; /* default transparan */
+  border-radius: 10px;
+}
+
+/* Saat hover container, scrollbar muncul */
+.artist-left:hover {
+  scrollbar-color: #000 transparent; /* Firefox muncul hitam */
+}
+
+.artist-left:hover::-webkit-scrollbar-thumb {
+  background-color: #000; /* thumb jadi hitam */
+}
+
+.artist-left:hover::-webkit-scrollbar-thumb:hover {
+  background-color: #333; /* sedikit lebih terang pas hover thumb */
+}
