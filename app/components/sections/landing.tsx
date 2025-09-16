@@ -1,15 +1,16 @@
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
+import { useEffect, useId, useRef } from 'react'
 
 export const LandingSection = () => {
   const taglineRef = useRef<HTMLHeadingElement>(null)
   const waveCanvasRef = useRef<HTMLCanvasElement>(null)
+  const taglineId = useId()
+  const waveCanvasId = useId()
 
   useEffect(() => {
     // 1. Tagline flicker animation
     if (taglineRef.current) {
       const taglineLines = taglineRef.current.querySelectorAll('.tagline-line')
-      
+
       taglineLines.forEach(line => {
         const text = line.textContent || ''
         line.textContent = ''
@@ -30,10 +31,10 @@ export const LandingSection = () => {
     }
 
     // 2. Original wave animation
-    function createWaveAnimation(canvas: HTMLCanvasElement, color = "#FFD900") {
+    function createWaveAnimation(canvas: HTMLCanvasElement, color = '#FFD900') {
       if (!canvas) return
 
-      const ctx = canvas.getContext("2d")
+      const ctx = canvas.getContext('2d')
       if (!ctx) return
 
       let phases: number[] = []
@@ -55,20 +56,27 @@ export const LandingSection = () => {
         }
       }
 
-      function drawWave(phaseArray: number[], yOffset: number, waveColor: string, amplitude = 15, alpha = 1) {
+      function drawWave(
+        phaseArray: number[],
+        yOffset: number,
+        waveColor: string,
+        amplitude = 15,
+        alpha = 1,
+      ) {
         if (!ctx) return
-        
+
         ctx.beginPath()
         ctx.moveTo(0, canvas.height / 2 + yOffset)
 
         for (let i = 0; i < phaseArray.length; i++) {
           const x = i * waveResolution
-          const y = Math.sin(t + phaseArray[i]) * amplitude * (
-            0.6 + Math.sin(phaseArray[i] * 3 + t * 0.2) * 0.4
-          )
+          const y =
+            Math.sin(t + phaseArray[i]) *
+            amplitude *
+            (0.6 + Math.sin(phaseArray[i] * 3 + t * 0.2) * 0.4)
           ctx.lineTo(x, canvas.height / 2 + y + yOffset)
         }
-        
+
         ctx.lineTo(canvas.width, canvas.height / 2 + yOffset)
         ctx.strokeStyle = waveColor
         ctx.globalAlpha = alpha
@@ -79,9 +87,9 @@ export const LandingSection = () => {
 
       function animate() {
         if (!ctx) return
-        
+
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        drawWave(shadowPhases, -40, "rgba(255, 217, 0, 0.4)", 20, 0.4)
+        drawWave(shadowPhases, -40, 'rgba(255, 217, 0, 0.4)', 20, 0.4)
         drawWave(phases, -40, color, 18, 1)
         t += 0.03
         requestAnimationFrame(animate)
@@ -90,14 +98,14 @@ export const LandingSection = () => {
       resizeCanvas()
       initPhases()
       animate()
-      
+
       const handleResize = () => {
         resizeCanvas()
         initPhases()
       }
-      
-      window.addEventListener("resize", handleResize)
-      return () => window.removeEventListener("resize", handleResize)
+
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
     }
 
     if (waveCanvasRef.current) {
@@ -107,17 +115,17 @@ export const LandingSection = () => {
   }, [])
 
   return (
-    <section id="Home" className="section landing-section active">
+    <section id="Home" className="section landing-section home-section">
       <div className="logo-container">
-        <h1 className="tagline" id="animatedTagline" ref={taglineRef}>
+        <h1 className="tagline" id={taglineId} ref={taglineRef}>
           <span className="tagline-line">Create Music</span>
           <span className="tagline-line">with Essentials.</span>
         </h1>
       </div>
-      <canvas 
-        id="waveCanvas" 
+      <canvas
+        className="wave-canvas"
+        id={waveCanvasId}
         ref={waveCanvasRef}
-        aria-hidden="true"
         style={{
           position: 'fixed',
           left: 0,
@@ -131,7 +139,7 @@ export const LandingSection = () => {
           padding: 0,
           border: 0,
           outline: 0,
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
         }}
       />
     </section>

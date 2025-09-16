@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
 
 interface SectionContextType {
   activeSection: string
@@ -15,7 +15,7 @@ export function SectionProvider({ children }: { children: ReactNode }) {
     // Hide all sections
     const allSections = document.querySelectorAll('.section')
     allSections.forEach(s => s.classList.remove('active'))
-    
+
     // Show target section
     const targetSection = document.getElementById(section)
     if (targetSection) {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * Hook to track which section is currently active based on scroll position
@@ -13,24 +13,31 @@ export const useActiveSection = () => {
       { id: 'about', element: document.getElementById('About') },
       { id: 'artists', element: document.getElementById('Artists') },
       { id: 'pricelist', element: document.getElementById('Pricelist') },
-      { id: 'contact', element: document.getElementById('contact') }
+      { id: 'contact', element: document.getElementById('contact') },
     ]
 
     const observerOptions = {
       root: null,
       rootMargin: '-50% 0px -50% 0px',
-      threshold: 0
+      threshold: 0,
     }
 
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
           const sectionId = entry.target.id.toLowerCase()
-          const mappedId = sectionId === 'home' ? 'home' : 
-                          sectionId === 'about' ? 'about' :
-                          sectionId === 'artists' ? 'artists' :
-                          sectionId === 'pricelist' ? 'pricelist' :
-                          sectionId === 'contact' ? 'contact' : 'home'
+          const mappedId =
+            sectionId === 'home'
+              ? 'home'
+              : sectionId === 'about'
+                ? 'about'
+                : sectionId === 'artists'
+                  ? 'artists'
+                  : sectionId === 'pricelist'
+                    ? 'pricelist'
+                    : sectionId === 'contact'
+                      ? 'contact'
+                      : 'home'
           setActiveSection(mappedId)
         }
       })
@@ -52,7 +59,7 @@ export const useActiveSection = () => {
 
   return {
     activeSection,
-    setActiveSection
+    setActiveSection,
   }
 }
 

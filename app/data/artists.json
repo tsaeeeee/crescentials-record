@@ -25,22 +25,21 @@
       "youtube": "https://www.youtube.com/@pashaqonia"
     },
     "tracks": [
-      "https://open.spotify.com/embed/track/3cU9k4UYd1p8Hxq9x0y2g6?si=b95d8c4e8f5f4d9f",
-      "https://open.spotify.com/embed/track/2xH8W2bXnbcowuWygaR26b?si=1faa0f5b58af42g3"
+      "https://open.spotify.com/embed/track/199kxeohm3PQ8bhkUHE796?si=118eca96caec4ab7",
+      "https://open.spotify.com/embed/track/3f4gA5sfmvLjYb6XlH0y7P?si=3f4dd21c46dc4b3a",
+      "https://open.spotify.com/embed/track/58JRlCPbZU8d39GP5vnCXj?si=a9a2b19466c94dd8"
     ]
   },
   {
     "name": "Reby Chandra",
     "bio": "Reby Chandra is an emerging Indonesian artist who brings a fresh perspective to contemporary music. With a focus on heartfelt lyrics and melodic compositions, Reby creates music that resonates with listeners on a personal level.",
-    "image": "/assets/images/edited/artis_reby.png", 
+    "image": "/assets/images/edited/artis_reby.png",
     "socials": {
       "instagram": "https://www.instagram.com/rebychandra/",
       "spotify": "https://open.spotify.com/artist/5VoE0CKWr0aFfBrWLEFxqh?si=49d55ce8d7c24b47",
       "youtube": "https://www.youtube.com/@rebychandra"
     },
-    "tracks": [
-      "https://open.spotify.com/embed/track/4dU9k4UYd1p8Hxq9x0y2g7?si=c95d8c4e8f5f4d9g"
-    ]
+    "tracks": ["https://open.spotify.com/embed/album/1OYEYIEHIOuiQtCRVKJ4XS?si=wAHwHhPtRF2db7buhhybwg"]
   },
   {
     "name": "Tania Salsabila",
@@ -48,12 +47,10 @@
     "image": "/assets/images/edited/artis_tania.png",
     "socials": {
       "instagram": "https://www.instagram.com/taniasalsabila/",
-      "spotify": "https://open.spotify.com/artist/6VoE0CKWr0aFfBrWLEFxqi?si=59d55ce8d7c24b48", 
+      "spotify": "https://open.spotify.com/artist/6VoE0CKWr0aFfBrWLEFxqi?si=59d55ce8d7c24b48",
       "youtube": "https://www.youtube.com/@taniasalsabila"
     },
-    "tracks": [
-      "https://open.spotify.com/embed/track/5eU9k4UYd1p8Hxq9x0y2g8?si=d95d8c4e8f5f4d9h"
-    ]
+    "tracks": ["https://open.spotify.com/embed/track/5S2dmWAwdz5DyhoPVDCgZq?si=7161acda14ea4ef4"]
   },
   {
     "name": "Crescentials Record",
@@ -65,7 +62,8 @@
       "youtube": "https://www.youtube.com/@crescentialsrecord"
     },
     "tracks": [
-      "https://open.spotify.com/embed/track/6fU9k4UYd1p8Hxq9x0y2g9?si=e95d8c4e8f5f4d9i"
+      "https://open.spotify.com/embed/album/6VXdPMGjphrWTQv3XdqBob?si=4bkaLOogSuOr-Q3cCsHp2w",
+      "https://open.spotify.com/embed/track/3VDAvdC4jPBp0gPOfW6P1Z?si=6f68559c238542b8"
     ]
   }
 ]

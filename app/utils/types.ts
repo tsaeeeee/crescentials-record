@@ -11,7 +11,7 @@ export interface Artist {
   tracks: string[] // Spotify embed URLs
 }
 
-// Pricing Package Types  
+// Pricing Package Types
 export interface PricingPackage {
   id: string
   name: string
@@ -19,8 +19,8 @@ export interface PricingPackage {
   features: string[]
   price: {
     amount: number
-    currency: "IDR" | "USD"
-    period?: "per song" | "per project"
+    currency: 'IDR' | 'USD'
+    period?: 'per song' | 'per project'
   }
   popular?: boolean
 }

@@ -5,7 +5,7 @@
     "description": "Professional single track production with mixing and mastering",
     "features": [
       "Professional recording session",
-      "Audio editing and arrangement", 
+      "Audio editing and arrangement",
       "Mixing with EQ and effects",
       "Basic mastering",
       "2 revisions included"
@@ -18,7 +18,7 @@
     "popular": false
   },
   {
-    "id": "premium-single", 
+    "id": "premium-single",
     "name": "Premium Single Production",
     "description": "Complete single production with advanced mixing and mastering",
     "features": [
@@ -31,7 +31,7 @@
     ],
     "price": {
       "amount": 800000,
-      "currency": "IDR", 
+      "currency": "IDR",
       "period": "per song"
     },
     "popular": true
@@ -57,14 +57,14 @@
   },
   {
     "id": "album-production",
-    "name": "Full Album Production", 
+    "name": "Full Album Production",
     "description": "Complete album production with comprehensive studio services",
     "features": [
       "Full album recording sessions (8-12 tracks)",
       "Professional arrangement and composition help",
       "Premium mixing and mastering for all tracks",
       "Album artwork design",
-      "Distribution and streaming platform preparation", 
+      "Distribution and streaming platform preparation",
       "Marketing consultation",
       "Unlimited revisions throughout process"
     ],

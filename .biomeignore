@@ -1,0 +1,7 @@
+node_modules
+build
+dist
+.react-router
+public
+*.min.js
+*.min.css
