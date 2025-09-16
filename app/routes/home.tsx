@@ -6,7 +6,8 @@ import { AboutSection } from '../components/sections/about'
 import { ArtistsSection } from '../components/sections/artists'
 import { PricelistSection } from '../components/sections/pricelist'
 import { ContactSection } from '../components/sections/contact'
-import { SectionProvider } from '../contexts/SectionContext'
+import { SectionProvider, useSectionContext } from '../contexts/SectionContext'
+import { useCursor } from '../hooks/useCursor'
 // Import data
 import artistsData from '../data/artists.json'
 import contactData from '../data/contact.json'
@@ -34,7 +35,44 @@ export async function loader({}: Route.LoaderArgs) {
   }
 }
 
+function MainContent() {
+  const { activeSection } = useSectionContext()
+
+  return (
+    <main className="landing">
+      {/* Landing Section with Animations */}
+      <div
+        className={`section landing-section home-section ${activeSection === 'Home' ? 'active' : ''}`}
+      >
+        <LandingSection />
+      </div>
+
+      {/* About Section */}
+      <div className={`section about-section ${activeSection === 'About' ? 'active' : ''}`}>
+        <AboutSection />
+      </div>
+
+      {/* Artists Section */}
+      <div className={`section ${activeSection === 'Artists' ? 'active' : ''}`}>
+        <ArtistsSection />
+      </div>
+
+      {/* Pricelist Section */}
+      <div className={`section ${activeSection === 'Pricelist' ? 'active' : ''}`}>
+        <PricelistSection />
+      </div>
+
+      {/* Contact Section */}
+      <div className={`section contact-section ${activeSection === 'Contact' ? 'active' : ''}`}>
+        <ContactSection />
+      </div>
+    </main>
+  )
+}
+
 export default function Home() {
+  useCursor() // Add cursor tracking
+
   return (
     <SectionProvider>
       <div className="crescentials-app">
@@ -48,22 +86,7 @@ export default function Home() {
         <div className="side-label">Crescentials Record © 2025</div>
 
         {/* Main Content */}
-        <main className="landing">
-          {/* Landing Section with Animations */}
-          <LandingSection />
-
-          {/* About Section */}
-          <AboutSection />
-
-          {/* Artists Section */}
-          <ArtistsSection />
-
-          {/* Pricelist Section */}
-          <PricelistSection />
-
-          {/* Contact Section */}
-          <ContactSection />
-        </main>
+        <MainContent />
       </div>
     </SectionProvider>
   )

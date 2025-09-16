@@ -115,7 +115,7 @@ export const LandingSection = () => {
   }, [])
 
   return (
-    <section id="Home" className="section landing-section home-section">
+    <>
       <div className="logo-container">
         <h1 className="tagline" id={taglineId} ref={taglineRef}>
           <span className="tagline-line">Create Music</span>
@@ -142,6 +142,6 @@ export const LandingSection = () => {
           boxSizing: 'border-box',
         }}
       />
-    </section>
+    </>
   )
 }

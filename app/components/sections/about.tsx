@@ -4,7 +4,7 @@ export function AboutSection() {
   const waveCanvasId = useId()
 
   return (
-    <section id="About" className="section about-section">
+    <>
       <div className="about-container">
         <div className="about-left"></div>
         <div className="about-right">
@@ -47,6 +47,6 @@ export function AboutSection() {
           boxSizing: 'border-box',
         }}
       />
-    </section>
+    </>
   )
 }

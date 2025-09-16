@@ -1,43 +1,26 @@
-import { gsap } from 'gsap'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { useArtistNavigation, useArtists, usePreloadArtistImages } from '~/hooks/useArtists'
+import gsap from '~/utils/gsap-config'
+import type { Artist } from '~/types/artist'
 
-export function ArtistsSection() {
-  const [currentArtist, setCurrentArtist] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [lastNavigationTime, setLastNavigationTime] = useState(0)
+interface ArtistContentProps {
+  artist: Artist
+}
 
-  // Refs for GSAP animations
-  const detailsRef = useRef<HTMLDivElement>(null)
-  const imagesRef = useRef<HTMLDivElement>(null)
-  const navigationThrottle = 800
+function ArtistContent({ artist }: ArtistContentProps) {
+  const contentRef = useRef<HTMLDivElement>(null)
 
-  // React Query hooks
-  const { data: artists, isLoading, error } = useArtists()
-  const { preloadImages } = usePreloadArtistImages()
-  const { prefetchAdjacentArtists } = useArtistNavigation(currentArtist, artists?.length || 0)
-
-  // Preload images when artists data is available
-  useEffect(() => {
-    if (artists && artists.length > 0) {
-      preloadImages(artists)
-      prefetchAdjacentArtists()
-    }
-  }, [artists, preloadImages, prefetchAdjacentArtists])
-
-  // Update prefetch when currentArtist changes
-  useEffect(() => {
-    if (artists && artists.length > 0) {
-      prefetchAdjacentArtists()
-    }
-  }, [artists, prefetchAdjacentArtists])
+  const iconMap: Record<string, string> = {
+    instagram: 'ri-instagram-line',
+    youtube: 'ri-youtube-line',
+    spotify: 'ri-spotify-line',
+  }
 
   const updateContent = useCallback(
-    (index: number) => {
-      if (!artists || !detailsRef.current) return
+    (newArtist: Artist) => {
+      if (!contentRef.current) return
 
-      const artist = artists[index]
-      const detailsContainer = detailsRef.current
+      const detailsContainer = contentRef.current
 
       // Clean up existing iframes to prevent memory leaks
       const existingIframes = detailsContainer.querySelectorAll('iframe')
@@ -51,27 +34,21 @@ export function ArtistsSection() {
 
       // Artist name
       const artistName = document.createElement('h2')
-      artistName.textContent = artist.name
+      artistName.textContent = newArtist.name
       contentWrapper.appendChild(artistName)
 
       // Artist bio
       const artistBio = document.createElement('p')
-      artistBio.textContent = artist.bio
+      artistBio.textContent = newArtist.bio
       contentWrapper.appendChild(artistBio)
 
       // Social links
       const socialsContainer = document.createElement('div')
       socialsContainer.className = 'socials'
 
-      Object.entries(artist.socials)
+      Object.entries(newArtist.socials)
         .filter(([, url]) => url)
         .forEach(([platform, url]) => {
-          const iconMap: Record<string, string> = {
-            instagram: 'ri-instagram-line',
-            youtube: 'ri-youtube-line',
-            spotify: 'ri-spotify-line',
-          }
-
           const socialLink = document.createElement('a')
           socialLink.href = url || '#'
           socialLink.target = '_blank'
@@ -87,7 +64,7 @@ export function ArtistsSection() {
       contentWrapper.appendChild(socialsContainer)
 
       // Tracks section
-      if (artist.tracks && artist.tracks.length > 0) {
+      if (newArtist.tracks && newArtist.tracks.length > 0) {
         const releasesLabel = document.createElement('div')
         releasesLabel.className = 'releases-label'
         releasesLabel.textContent = 'Latest Releases'
@@ -97,7 +74,7 @@ export function ArtistsSection() {
         const tracksContainer = document.createElement('div')
         tracksContainer.className = 'spotify-tracks'
 
-        artist.tracks.forEach((track, trackIndex) => {
+        newArtist.tracks.forEach((track, trackIndex) => {
           const trackWrapper = document.createElement('div')
           trackWrapper.className = 'spotify-track-wrapper'
           trackWrapper.style.opacity = '0'
@@ -125,7 +102,7 @@ export function ArtistsSection() {
           iframe.frameBorder = '0'
           iframe.setAttribute('allowtransparency', 'true')
           iframe.allow = 'encrypted-media'
-          iframe.title = `${artist.name} Track ${trackIndex + 1}`
+          iframe.title = `${newArtist.name} Track ${trackIndex + 1}`
           iframe.loading = 'lazy'
           iframe.style.opacity = '0'
           iframe.style.transition = 'opacity 0.4s ease'
@@ -196,211 +173,213 @@ export function ArtistsSection() {
         })
       }
     },
-    [artists],
+    [],
   )
 
-  const showImage = useCallback(
-    (index: number, direction: 'next' | 'prev') => {
-      if (!imagesRef.current || isTransitioning || index === currentArtist || !artists) return
+  // Initialize content when component mounts or artist changes
+  useEffect(() => {
+    if (artist && contentRef.current) {
+      updateContent(artist)
+    }
+  }, [artist, updateContent])
+
+  return <div className="artist-content" ref={contentRef}></div>
+}
+
+interface ArtistStateProps {
+  type: 'loading' | 'error' | 'empty'
+  message?: string
+}
+
+function ArtistState({ type, message }: ArtistStateProps) {
+  const content = {
+    loading: {
+      element: <div className="loading-spinner"></div>,
+      text: 'Loading artists...',
+    },
+    error: {
+      element: <h3>Failed to load artists</h3>,
+      text: 'Please try refreshing the page.',
+    },
+    empty: {
+      element: <h3>No artists found</h3>,
+      text: 'Check back later for artist updates.',
+    },
+  }
+
+  const { element, text } = content[type]
+
+  return (
+    <div className="artist-container">
+      <div className={`artist-${type}`}>
+        {element}
+        <p>{message || text}</p>
+      </div>
+    </div>
+  )
+}
+
+export function ArtistsSection() {
+  const [currentArtist, setCurrentArtist] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [lastNavigationTime, setLastNavigationTime] = useState(0)
+  const navigationThrottle = 800
+
+  // React Query hooks
+  const { data: artists, isLoading, error } = useArtists()
+  const { preloadImages } = usePreloadArtistImages()
+  const { prefetchAdjacentArtists } = useArtistNavigation(currentArtist, artists?.length || 0)
+
+  // Preload images when artists data is available
+  useEffect(() => {
+    if (artists?.length) {
+      preloadImages(artists)
+      prefetchAdjacentArtists()
+    }
+  }, [artists, preloadImages, prefetchAdjacentArtists])
+
+  // Update prefetch when currentArtist changes
+  useEffect(() => {
+    if (artists?.length) {
+      prefetchAdjacentArtists()
+    }
+  }, [artists, prefetchAdjacentArtists])
+
+  // Initialize image positioning and clean transforms on mount
+  useEffect(() => {
+    if (artists?.length) {
+      const imageContainer = document.querySelector('.artist-image-container')
+      if (imageContainer) {
+        const images = imageContainer.querySelectorAll('img')
+        // Clean any leftover styles and classes, ensure proper initial state
+        images.forEach((img, index) => {
+          // Remove all transition classes
+          img.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right')
+          // Remove inline styles
+          img.style.transform = ''
+          img.style.opacity = ''
+          
+          if (index === 0) {
+            img.classList.add('active')
+          } else {
+            img.classList.remove('active')
+          }
+        })
+      }
+    }
+  }, [artists])
+
+  const navigate = useCallback(
+    (direction: 'next' | 'prev') => {
+      const now = Date.now()
+      if (now - lastNavigationTime < navigationThrottle || isTransitioning || !artists?.length)
+        return
 
       setIsTransitioning(true)
-      const images = imagesRef.current.querySelectorAll('img')
-      const current = images[currentArtist]
-      const next = images[index]
+      setLastNavigationTime(now)
 
-      // Update content immediately when transition starts
-      updateContent(index)
+      const newIndex =
+        direction === 'next'
+          ? (currentArtist + 1) % artists.length
+          : (currentArtist - 1 + artists.length) % artists.length
 
-      // Check if we're on mobile (1024px breakpoint from CSS)
-      const isMobile = window.innerWidth <= 1024
+      // Use CSS classes for smooth carousel transitions
+      const imageContainer = document.querySelector('.artist-image-container')
+      if (imageContainer) {
+        const images = imageContainer.querySelectorAll('img')
+        const current = images[currentArtist]
+        const next = images[newIndex]
 
-      // Smooth image transition
-      const tl = gsap.timeline({
-        onComplete: () => {
-          current?.classList.remove('active')
-          next?.classList.add('active')
-          setCurrentArtist(index)
-          setIsTransitioning(false)
-          // Clear any GSAP-applied transforms
-          gsap.set([current, next], { clearProps: 'x,y,xPercent,yPercent' })
-        },
-      })
+        if (current && next) {
+          // Remove active class from current image
+          current.classList.remove('active')
+          
+          // Add slide-out class to current image
+          const slideOutClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right'
+          current.classList.add(slideOutClass)
 
-      if (isMobile) {
-        // Mobile: Use xPercent for relative positioning
-        tl.to(current, {
-          xPercent: direction === 'next' ? -100 : 100,
-          opacity: 0,
-          duration: 0.6,
-          ease: 'power2.inOut',
-        }).fromTo(
-          next,
-          {
-            xPercent: direction === 'next' ? 100 : -100,
-            opacity: 0,
-          },
-          {
-            xPercent: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          '-=0.3',
-        )
-      } else {
-        // Desktop: Use absolute x positioning (original working method)
-        tl.to(current, {
-          x: direction === 'next' ? '-100%' : '100%',
-          opacity: 0,
-          duration: 0.6,
-          ease: 'power2.inOut',
-        }).fromTo(
-          next,
-          {
-            x: direction === 'next' ? '100%' : '-100%',
-            opacity: 0,
-          },
-          {
-            x: '0%',
-            opacity: 1,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          '-=0.3',
-        )
+          // Position next image off-screen in the correct direction before sliding in
+          const slideInClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left'
+          next.classList.remove('active') // Ensure it's not active
+          next.classList.add(slideInClass) // Position it off-screen
+
+          // Use requestAnimationFrame for smooth transition
+          requestAnimationFrame(() => {
+            // Remove slide-in class and add active class to trigger slide-in animation
+            next.classList.remove(slideInClass)
+            next.classList.add('active')
+          })
+
+          // Clean up classes after transition completes
+          setTimeout(() => {
+            current.classList.remove(slideOutClass)
+            setIsTransitioning(false)
+          }, 600) // Match CSS transition duration
+        }
       }
+
+      setCurrentArtist(newIndex)
     },
-    [currentArtist, isTransitioning, artists, updateContent],
+    [currentArtist, lastNavigationTime, isTransitioning, artists],
   )
-
-  const nextArtist = useCallback(() => {
-    const now = Date.now()
-    if (now - lastNavigationTime < navigationThrottle || isTransitioning || !artists) return
-
-    setLastNavigationTime(now)
-    const nextIndex = (currentArtist + 1) % artists.length
-    showImage(nextIndex, 'next')
-  }, [currentArtist, lastNavigationTime, isTransitioning, artists, showImage])
-
-  const prevArtist = useCallback(() => {
-    const now = Date.now()
-    if (now - lastNavigationTime < navigationThrottle || isTransitioning || !artists) return
-
-    setLastNavigationTime(now)
-    const prevIndex = (currentArtist - 1 + artists.length) % artists.length
-    showImage(prevIndex, 'prev')
-  }, [currentArtist, lastNavigationTime, isTransitioning, artists, showImage])
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') prevArtist()
-      if (e.key === 'ArrowRight') nextArtist()
+      if (e.key === 'ArrowLeft') navigate('prev')
+      if (e.key === 'ArrowRight') navigate('next')
     }
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [nextArtist, prevArtist])
+  }, [navigate])
 
-  // Initialize content when component mounts or data changes
-  useEffect(() => {
-    if (artists && artists.length > 0 && detailsRef.current) {
-      updateContent(0)
-
-      // Ensure all images have clean transforms on mount
-      if (imagesRef.current) {
-        const images = imagesRef.current.querySelectorAll('img')
-        gsap.set(images, { clearProps: 'transform' })
-      }
-    }
-  }, [artists, updateContent])
-
-  if (isLoading) {
-    return (
-      <section id="Artists" className="section">
-        <div className="artist-container">
-          <div className="artist-loading">
-            <div className="loading-spinner"></div>
-            <p>Loading artists...</p>
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  if (error) {
-    return (
-      <section id="Artists" className="section">
-        <div className="artist-container">
-          <div className="artist-error">
-            <h3>Failed to load artists</h3>
-            <p>Please try refreshing the page.</p>
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  if (!artists || artists.length === 0) {
-    return (
-      <section id="Artists" className="section">
-        <div className="artist-container">
-          <div className="artist-empty">
-            <h3>No artists found</h3>
-            <p>Check back later for artist updates.</p>
-          </div>
-        </div>
-      </section>
-    )
-  }
+  // Handle different states
+  if (isLoading) return <ArtistState type="loading" />
+  if (error) return <ArtistState type="error" />
+  if (!artists?.length) return <ArtistState type="empty" />
 
   return (
-    <section id="Artists" className="section">
-      <div className="artist-container">
-        {/* Left Panel - Artist Info */}
-        <div className="artist-left">
-          <div className="artist-content" ref={detailsRef}>
-            {/* Content will be populated by updateContent function */}
-          </div>
-        </div>
+    <div className="artist-container">
+      {/* Left Panel - Artist Info */}
+      <div className="artist-left">
+        <ArtistContent artist={artists[currentArtist]} />
+      </div>
 
-        {/* Right Panel - Artist Images */}
-        <div className="artist-right">
-          <div className="artist-image-container" ref={imagesRef}>
-            {artists.map((artist, index) => (
-              <img
-                key={`${artist.name}-${index}`}
-                src={artist.image}
-                alt={artist.name}
-                className={index === currentArtist ? 'active' : ''}
-                style={{ opacity: index === 0 ? 1 : 0 }}
-              />
-            ))}
-          </div>
-
-          {/* Navigation */}
-          <div className="artist-nav">
-            <button
-              type="button"
-              onClick={prevArtist}
-              disabled={isTransitioning}
-              aria-label="Previous Artist"
-              style={{ opacity: isTransitioning ? 0.5 : 1 }}
-            >
-              <i className="ri-arrow-left-s-line"></i>
-            </button>
-            <button
-              type="button"
-              onClick={nextArtist}
-              disabled={isTransitioning}
-              aria-label="Next Artist"
-              style={{ opacity: isTransitioning ? 0.5 : 1 }}
-            >
-              <i className="ri-arrow-right-s-line"></i>
-            </button>
-          </div>
+      {/* Right Panel - Artist Images */}
+      <div className="artist-right">
+        <div className="artist-image-container">
+          {artists.map((artist, index) => (
+            <img
+              key={`${artist.name}-${index}`}
+              src={artist.image}
+              alt={artist.name}
+              className={index === currentArtist ? 'active' : ''}
+            />
+          ))}
+        </div>{' '}
+        {/* Navigation */}
+        <div className="artist-nav">
+          <button
+            type="button"
+            onClick={() => navigate('prev')}
+            disabled={isTransitioning}
+            aria-label="Previous Artist"
+            style={{ opacity: isTransitioning ? 0.5 : 1 }}
+          >
+            <i className="ri-arrow-left-s-line"></i>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('next')}
+            disabled={isTransitioning}
+            aria-label="Next Artist"
+            style={{ opacity: isTransitioning ? 0.5 : 1 }}
+          >
+            <i className="ri-arrow-right-s-line"></i>
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   )
 }

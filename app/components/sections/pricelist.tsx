@@ -115,7 +115,7 @@ export function PricelistSection() {
   const currentPackage = packages[selectedPackage]
 
   return (
-    <section id="Pricelist" className="section">
+    <>
       <div className="pricelist-container">
         {/* Left Panel - Package Picker */}
         <div className="left">
@@ -169,6 +169,6 @@ export function PricelistSection() {
           </div>
         </div>
       </div>
-    </section>
+    </>
   )
 }

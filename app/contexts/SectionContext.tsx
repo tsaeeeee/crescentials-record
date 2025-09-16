@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
+import { createContext, type ReactNode, useContext, useState } from 'react'
 
 interface SectionContextType {
   activeSection: string
@@ -12,25 +12,8 @@ export function SectionProvider({ children }: { children: ReactNode }) {
   const [activeSection, setActiveSection] = useState('Home')
 
   const navigateToSection = (section: string) => {
-    // Hide all sections
-    const allSections = document.querySelectorAll('.section')
-    allSections.forEach(s => s.classList.remove('active'))
-
-    // Show target section
-    const targetSection = document.getElementById(section)
-    if (targetSection) {
-      targetSection.classList.add('active')
-      setActiveSection(section)
-    }
+    setActiveSection(section)
   }
-
-  useEffect(() => {
-    // Set initial active section
-    const homeSection = document.getElementById('Home')
-    if (homeSection) {
-      homeSection.classList.add('active')
-    }
-  }, [])
 
   return (
     <SectionContext.Provider value={{ activeSection, setActiveSection, navigateToSection }}>

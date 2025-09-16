@@ -33,7 +33,7 @@ export function ContactSection() {
   ]
 
   return (
-    <section id="Contact" className="section contact-section">
+    <>
       <div className="subtitle">Ready to create?</div>
       <h1>Let&apos;s make music together.</h1>
       
@@ -65,6 +65,6 @@ export function ContactSection() {
       <div className="footer">
         © 2025 Crescentials Record. All rights reserved.
       </div>
-    </section>
+    </>
   )
 }
