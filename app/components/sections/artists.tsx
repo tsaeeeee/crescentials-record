@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { useArtistNavigation, useArtists, usePreloadArtistImages } from '~/hooks/useArtists'
-import gsap from '~/utils/gsap-config'
 import type { Artist } from '~/types/artist'
+import gsap from '~/utils/gsap-config'
 
 interface ArtistContentProps {
   artist: Artist
@@ -382,4 +382,5 @@ export function ArtistsSection() {
       </div>
     </div>
   )
+
 }

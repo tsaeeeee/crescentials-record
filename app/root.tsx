@@ -20,6 +20,11 @@ export const links: Route.LinksFunction = () => [
     rel: 'stylesheet',
     href: 'https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css',
   },
+  // Favicon links
+  { rel: 'icon', href: '/assets/images/Crescentials Record - Favicon.png', type: 'image/png' },
+  { rel: 'apple-touch-icon', href: '/assets/images/Crescentials Record - Favicon.png' },
+  // PWA Manifest
+  { rel: 'manifest', href: '/manifest.json' },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {

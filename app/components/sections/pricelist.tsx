@@ -1,174 +1,273 @@
-import { useId, useEffect, useState, useCallback } from 'react'
-
-interface PricePackage {
-  id: string
-  name: string
-  price: string
-  features: string[]
-}
+import { gsap } from 'gsap'
+import { useEffect, useRef } from 'react'
 
 export function PricelistSection() {
-  const detailsId = useId()
-  const [selectedPackage, setSelectedPackage] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
-
-  // Sample pricing data - in production this would come from props or API
-  const packages: PricePackage[] = [
-    {
-      id: 'basic',
-      name: 'Basic Recording',
-      price: 'Rp 500.000',
-      features: [
-        'Recording session up to 4 hours',
-        'Basic mixing and mastering',
-        'Up to 3 revisions',
-        'Digital delivery (MP3/WAV)',
-        'Single track production'
-      ]
-    },
-    {
-      id: 'professional',
-      name: 'Professional Package',
-      price: 'Rp 1.500.000',
-      features: [
-        'Recording session up to 8 hours',
-        'Professional mixing and mastering',
-        'Unlimited revisions',
-        'High-quality digital delivery',
-        'Album artwork design',
-        'Social media assets'
-      ]
-    },
-    {
-      id: 'premium',
-      name: 'Premium Studio',
-      price: 'Rp 3.000.000',
-      features: [
-        'Full day recording session',
-        'Premium mixing and mastering',
-        'Live recording capabilities',
-        'Video recording session',
-        'Complete album production',
-        'Marketing consultation',
-        'Distribution assistance'
-      ]
-    },
-    {
-      id: 'custom',
-      name: 'Custom Production',
-      price: 'Contact Us',
-      features: [
-        'Tailored to your needs',
-        'Extended recording time',
-        'Multi-track production',
-        'Live band recording',
-        'Music video production',
-        'Full creative direction'
-      ]
-    }
-  ]
-
-  const nextPackage = useCallback(() => {
-    setSelectedPackage((prev) => (prev + 1) % packages.length)
-  }, [packages.length])
-
-  const prevPackage = useCallback(() => {
-    setSelectedPackage((prev) => (prev - 1 + packages.length) % packages.length)
-  }, [packages.length])
-
-  const handlePackageSelect = useCallback((index: number) => {
-    setSelectedPackage(index)
-    setIsVisible(false)
-  }, [])
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent, index: number) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handlePackageSelect(index)
-    }
-  }, [handlePackageSelect])
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        prevPackage()
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        nextPackage()
-      }
-    }
+    const container = containerRef.current
+    if (!container) return
 
-    window.addEventListener('keydown', handleKeyPress)
-    return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [nextPackage, prevPackage])
-
-  useEffect(() => {
-    // Show details when package is selected
-    const timer = setTimeout(() => {
-      setIsVisible(true)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [selectedPackage])
-
-  const currentPackage = packages[selectedPackage]
-
-  return (
-    <>
-      <div className="pricelist-container">
-        {/* Left Panel - Package Picker */}
-        <div className="left">
-          <div className="title-zone">
-            <div className="title">Choose Your Package</div>
-          </div>
-          
-          <div className="picker-zone">
-            <div className="picker">
-              {packages.map((pkg, index) => (
-                <button
-                  key={pkg.id}
-                  type="button"
-                  className="picker-item"
-                  style={{
-                    opacity: index === selectedPackage ? 1 : 0.3,
-                    transform: `translateY(${(index - selectedPackage) * 100}px)`
-                  }}
-                  onClick={() => handlePackageSelect(index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                >
-                  {pkg.name}
-                </button>
-              ))}
+    // Create the new structure with fixed viewport
+    container.innerHTML = `
+      <div class="left">
+        <div class="title-zone">
+          <div class="title">Pick Your Packages</div>
+        </div>
+        <div class="picker-zone">
+          <div class="picker">
+            <div class="picker-viewport">
+              <div class="picker-list" id="picker-list">
+                <div class="picker-item">Full Package</div>
+                <div class="picker-item">Compose Only</div>
+                <div class="picker-item">Mix & Master</div>
+                <div class="picker-item">Live Sequencer Set</div>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Right Panel - Package Details */}
-        <div className="right">
-          <div id={detailsId} style={{ opacity: isVisible ? 1 : 0 }}>
-            <div className="price">{currentPackage.price}</div>
-            <ul>
-              {currentPackage.features.map((feature) => (
-                <li key={feature}>
-                  <span>✓</span> {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="notes">
-            <p>
-              All packages include consultation and project planning. 
-              Contact us for custom requirements or bulk discounts.
-            </p>
-            <p>
-              <strong>Note:</strong> Prices may vary based on project complexity 
-              and additional requirements.
-            </p>
-          </div>
+      </div>
+      <div class="right">
+        <div id="details"></div>
+        <div class="notes" id="notes">
+          *Terms and conditions apply. Kindly contact us for custom projects. <br>
+          *50% upfront payment required, with the remaining balance upon delivery. <br>
+          *Standard delivery time is 7–14 working days depending on complexity.
         </div>
       </div>
-    </>
-  )
+    `
+
+    const pickerList = document.getElementById('picker-list')
+    const items = Array.from(document.querySelectorAll('.picker-item')) as HTMLElement[]
+    const detailsBox = document.getElementById('details')
+    const notes = document.getElementById('notes')
+
+    const detailsData = [
+      {
+        price: 'IDR 1,25Mio',
+        points: [
+          'Bring your own demo',
+          'Any genre and instruments',
+          'Include <span>mixing and mastering service</span>',
+          'Get separated stems',
+          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
+          'Support until releases process (Optional)',
+          '<span>Promo Toolkit</span> (By Request)',
+        ],
+      },
+      {
+        price: 'IDR 850K',
+        points: [
+          'Bring your own demo',
+          'Any genre and instruments',
+          'Get separated stems',
+          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
+        ],
+      },
+      {
+        price: 'IDR 650K',
+        points: [
+          'Bring your own stems',
+          'Any genre and instruments',
+          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
+        ],
+      },
+      {
+        price: 'IDR 450K',
+        points: [
+          'Any songs, any genre and instruments',
+          'Include cue and guide',
+          'Get separated file stems',
+          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
+        ],
+      },
+    ]
+
+    let currentIndex = 0
+    let isAnimating = false
+
+    const getItemHeight = () => {
+      return window.innerWidth <= 1024 ? 75 : 100
+    }
+
+    function updatePicker() {
+      items.forEach((item, i) => {
+        const diff = Math.abs(i - currentIndex)
+        if (diff === 0) {
+          item.style.opacity = '1'
+          item.style.transform = 'scale(1.1)'
+        } else if (diff === 1) {
+          item.style.opacity = '0.5'
+          item.style.transform = 'scale(1)'
+        } else if (diff === 2) {
+          item.style.opacity = '0.15'
+          item.style.transform = 'scale(0.95)'
+        } else {
+          item.style.opacity = '0'
+          item.style.transform = 'scale(0.9)'
+        }
+      })
+
+      const titleZone = document.querySelector('.title-zone') as HTMLElement
+      if (titleZone && window.innerWidth <= 1024) {
+        if (currentIndex === 0) {
+          titleZone.classList.remove('hidden')
+        } else {
+          titleZone.classList.add('hidden')
+        }
+      }
+
+      if (pickerList) {
+        // Desktop: Use GSAP animation of entire picker for smoothness
+        // Mobile: Use viewport positioning with transform
+        if (window.innerWidth <= 1024) {
+          const itemHeight = getItemHeight()
+          const offset = -(currentIndex - 1) * itemHeight
+          pickerList.style.transform = `translateY(${offset}px)`
+        } else {
+          // Desktop: Animate with GSAP for smooth movement
+          // Adjust offset to center items better - use smaller spacing
+          gsap.to(pickerList, {
+            y: -currentIndex * 90,
+            duration: 0.4,
+            ease: 'power3.out',
+          })
+        }
+      }
+    }
+
+    function updateDetails(index: number) {
+      const data = detailsData[index]
+      const html = `
+        <h1 class="price">${data.price}</h1>
+        <ul>
+          ${data.points.map(p => `<li>${p}</li>`).join('')}
+        </ul>
+      `
+
+      if (detailsBox) {
+        gsap.to(detailsBox, {
+          opacity: 0,
+          duration: 0.2,
+          onComplete: () => {
+            detailsBox.innerHTML = html
+            const elements = detailsBox.querySelectorAll('h1, li')
+            gsap.set(elements, { opacity: 0, y: -20 })
+            gsap.to(detailsBox, { opacity: 1, duration: 0.2 })
+            gsap.to(elements, {
+              opacity: 1,
+              y: 0,
+              duration: 0.4,
+              stagger: 0.1,
+              ease: 'power2.out',
+            })
+          },
+        })
+      }
+    }
+
+    function movePicker(direction: number) {
+      if (isAnimating) return
+      const newIndex = currentIndex + direction
+      if (newIndex >= 0 && newIndex < items.length) {
+        currentIndex = newIndex
+        isAnimating = true
+        updateDetails(currentIndex)
+
+        if (window.innerWidth <= 1024) {
+          // Mobile: Instant update with CSS transform
+          updatePicker()
+          setTimeout(() => {
+            isAnimating = false
+          }, 400)
+        } else {
+          // Desktop: Smooth GSAP animation
+          if (pickerList) {
+            gsap.to(pickerList, {
+              y: -currentIndex * 90,
+              duration: 0.4,
+              ease: 'power3.out',
+              onUpdate: updatePicker,
+              onComplete: () => {
+                isAnimating = false
+              },
+            })
+          } else {
+            updatePicker()
+            setTimeout(() => {
+              isAnimating = false
+            }, 400)
+          }
+        }
+      }
+    }
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 0) movePicker(1)
+      else movePicker(-1)
+    }
+
+    const handleResize = () => {
+      const titleZone = document.querySelector('.title-zone') as HTMLElement
+      if (titleZone) {
+        if (window.innerWidth > 1024) {
+          titleZone.classList.remove('hidden')
+        } else {
+          if (currentIndex === 0) {
+            titleZone.classList.remove('hidden')
+          } else {
+            titleZone.classList.add('hidden')
+          }
+        }
+      }
+      updatePicker()
+    }
+
+    window.addEventListener('wheel', handleWheel)
+    window.addEventListener('resize', handleResize)
+
+    items.forEach((item, i) => {
+      item.addEventListener('click', () => {
+        if (i !== currentIndex) {
+          currentIndex = i
+          updateDetails(currentIndex)
+
+          if (window.innerWidth <= 1024) {
+            // Mobile: Instant update
+            updatePicker()
+          } else {
+            // Desktop: Smooth GSAP animation
+            if (pickerList) {
+              gsap.to(pickerList, {
+                y: -currentIndex * 90,
+                duration: 0.4,
+                ease: 'power3.out',
+                onUpdate: updatePicker,
+              })
+            } else {
+              updatePicker()
+            }
+          }
+        }
+      })
+    })
+
+    updatePicker()
+    updateDetails(currentIndex)
+
+    if (notes) {
+      gsap.fromTo(
+        notes,
+        { opacity: 0, y: 20 },
+        { opacity: 0.9, y: 0, duration: 1, ease: 'power2.out', delay: 0.5 },
+      )
+    }
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  return <div ref={containerRef} className="pricelist-container" />
 }

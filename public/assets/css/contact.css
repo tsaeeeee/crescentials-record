@@ -60,17 +60,34 @@
   justify-content: flex-start;
 }
 
+.contact-items .row:last-child {
+  justify-content: center;
+  max-width: 66.67%; /* 2/3 width for better centering */
+}
+
 .contact-items a {
   flex: 1;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   text-decoration: none;
   color: #ffd900;
   border: 1px solid #ffd900;
-  padding: 30px 5px;
+  padding: 30px 20px;
   border-radius: 50px;
   font-size: 18px;
   font-weight: 500;
   transition: all 0.3s ease;
+}
+
+.contact-items a i {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.contact-items a span {
+  line-height: 1;
 }
 
 .contact-items a:hover {
@@ -89,39 +106,60 @@
 /* Mobile Responsive */
 @media screen and (max-width: 768px) {
   .contact-section {
-    padding: 80px 2rem 2rem;
-    justify-content: flex-start;
+    padding: 60px 2rem 2rem; /* Consistent with about section */
+    justify-content: center;
+  }
+
+  .contact-section .subtitle {
+    margin-bottom: 20px;
+    font-size: 18px;
   }
 
   .contact-section h1 {
     font-size: clamp(2rem, 6vw, 4rem);
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
     line-height: 1.3;
   }
 
   .contact-items {
     max-width: 100%;
+    gap: 12px;
   }
 
   .contact-items .row {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
+  }
+
+  .contact-items .row:last-child {
+    max-width: 100%;
+    justify-content: flex-start;
   }
 
   .contact-items a {
-    padding: 20px 15px;
+    padding: 18px 20px;
     font-size: 16px;
+    gap: 10px;
   }
 
+  .contact-items a i {
+    font-size: 18px;
+  }
+
+  /* Hide copyright on mobile since it's in nav footer */
   .contact-section .footer {
-    margin-top: 3rem;
-    font-size: 12px;
+    display: none;
   }
 }
 
 @media screen and (max-width: 480px) {
   .contact-section {
-    padding: 80px 1rem 1rem;
+    padding: 60px 2rem 1rem; /* Consistent with about section */
+  }
+
+  .contact-section .subtitle {
+    font-size: 16px;
+    margin-bottom: 15px;
   }
 
   .contact-section h1 {
@@ -129,8 +167,21 @@
     margin-bottom: 2rem;
   }
 
+  .contact-items {
+    gap: 10px;
+  }
+
+  .contact-items .row {
+    gap: 10px;
+  }
+
   .contact-items a {
-    padding: 15px 10px;
+    padding: 15px 15px;
     font-size: 14px;
+    gap: 8px;
+  }
+
+  .contact-items a i {
+    font-size: 16px;
   }
 }

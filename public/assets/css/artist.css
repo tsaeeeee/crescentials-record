@@ -306,7 +306,6 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
   object-fit: contain;
   opacity: 0;
   backface-visibility: hidden;
@@ -535,7 +534,7 @@
     order: 2;
     height: auto;
     min-height: 60vh; /* Ensure minimum height for consistency */
-    padding: 1.5rem;
+    padding: 2rem; /* Consistent with about section */
     padding-bottom: 120px; /* Increased padding for bottom nav */
     width: 100%;
     box-sizing: border-box;

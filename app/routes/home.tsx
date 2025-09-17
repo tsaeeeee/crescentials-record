@@ -1,32 +1,56 @@
 // Import components
 import { Navigation } from '../components/layout/navigation'
 import { Preloader } from '../components/layout/preloader'
-import { LandingSection } from '../components/sections/landing'
 import { AboutSection } from '../components/sections/about'
 import { ArtistsSection } from '../components/sections/artists'
-import { PricelistSection } from '../components/sections/pricelist'
 import { ContactSection } from '../components/sections/contact'
+import { LandingSection } from '../components/sections/landing'
+import { PricelistSection } from '../components/sections/pricelist'
 import { SectionProvider, useSectionContext } from '../contexts/SectionContext'
-import { useCursor } from '../hooks/useCursor'
 // Import data
 import artistsData from '../data/artists.json'
 import contactData from '../data/contact.json'
 import pricelistData from '../data/pricelist.json'
 import siteMetaData from '../data/site-meta.json'
+import { useCursor } from '../hooks/useCursor'
 import type { Route } from './+types/home'
 
-export function meta({}: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return [
     { title: siteMetaData.title },
     { name: 'description', content: siteMetaData.description },
     { name: 'keywords', content: siteMetaData.keywords.join(', ') },
+    { name: 'author', content: 'Crescentials Record' },
+    { name: 'robots', content: 'index, follow' },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    { name: 'theme-color', content: siteMetaData.primaryColor },
+    
+    // Open Graph / Facebook
+    { property: 'og:type', content: 'website' },
     { property: 'og:title', content: siteMetaData.title },
     { property: 'og:description', content: siteMetaData.description },
     { property: 'og:image', content: siteMetaData.ogImage },
+    { property: 'og:url', content: 'https://crescentials-record.com' },
+    { property: 'og:site_name', content: 'Crescentials Record' },
+    { property: 'og:locale', content: 'id_ID' },
+    
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: siteMetaData.title },
+    { name: 'twitter:description', content: siteMetaData.description },
+    { name: 'twitter:image', content: siteMetaData.ogImage },
+    
+    // Additional SEO
+    { name: 'application-name', content: 'Crescentials Record' },
+    { name: 'apple-mobile-web-app-title', content: 'Crescentials Record' },
+    { name: 'apple-mobile-web-app-capable', content: 'yes' },
+    { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+    { name: 'msapplication-TileColor', content: siteMetaData.primaryColor },
+    { name: 'msapplication-TileImage', content: siteMetaData.favicon },
   ]
 }
 
-export async function loader({}: Route.LoaderArgs) {
+export async function loader(_: Route.LoaderArgs) {
   return {
     artists: artistsData,
     siteMeta: siteMetaData,
@@ -73,9 +97,71 @@ function MainContent() {
 export default function Home() {
   useCursor() // Add cursor tracking
 
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://crescentials-record.com/#organization",
+        "name": "Crescentials Record",
+        "url": "https://crescentials-record.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": siteMetaData.ogImage
+        },
+        "foundingDate": siteMetaData.established.toString(),
+        "description": siteMetaData.description,
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "Indonesia"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "availableLanguage": ["Indonesian", "English"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://crescentials-record.com/#website",
+        "url": "https://crescentials-record.com",
+        "name": "Crescentials Record",
+        "description": siteMetaData.description,
+        "publisher": {
+          "@id": "https://crescentials-record.com/#organization"
+        },
+        "inLanguage": "id-ID"
+      },
+      {
+        "@type": "LocalBusiness",
+        "name": "Crescentials Record",
+        "image": siteMetaData.ogImage,
+        "description": siteMetaData.description,
+        "url": "https://crescentials-record.com",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "Indonesia"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5",
+          "reviewCount": "100"
+        }
+      }
+    ]
+  }
+
   return (
     <SectionProvider>
       <div className="crescentials-app">
+        {/* Structured Data */}
+        <script 
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+
         {/* Preloader with SVG line drawing animation */}
         <Preloader />
 

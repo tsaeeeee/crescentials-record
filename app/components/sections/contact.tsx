@@ -24,11 +24,6 @@ export function ContactSection() {
       text: 'Spotify',
       href: 'https://open.spotify.com/artist/crescentials',
       icon: 'ri-spotify-line'
-    },
-    {
-      text: 'SoundCloud',
-      href: 'https://soundcloud.com/crescentials',
-      icon: 'ri-soundcloud-line'
     }
   ]
 
@@ -40,24 +35,26 @@ export function ContactSection() {
       <div className="contact-items">
         <div className="row">
           <a href={contactLinks[0].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[0].icon}></i> {contactLinks[0].text}
+            <i className={contactLinks[0].icon}></i>
+            <span>{contactLinks[0].text}</span>
           </a>
           <a href={contactLinks[1].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[1].icon}></i> {contactLinks[1].text}
+            <i className={contactLinks[1].icon}></i>
+            <span>{contactLinks[1].text}</span>
           </a>
           <a href={contactLinks[2].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[2].icon}></i> {contactLinks[2].text}
+            <i className={contactLinks[2].icon}></i>
+            <span>{contactLinks[2].text}</span>
           </a>
         </div>
         <div className="row">
           <a href={contactLinks[3].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[3].icon}></i> {contactLinks[3].text}
+            <i className={contactLinks[3].icon}></i>
+            <span>{contactLinks[3].text}</span>
           </a>
           <a href={contactLinks[4].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[4].icon}></i> {contactLinks[4].text}
-          </a>
-          <a href={contactLinks[5].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[5].icon}></i> {contactLinks[5].text}
+            <i className={contactLinks[4].icon}></i>
+            <span>{contactLinks[4].text}</span>
           </a>
         </div>
       </div>

@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://crescentials-record.com/sitemap.xml
+
+# Disallow crawling of build files
+Disallow: /build/
+Disallow: /node_modules/
+Disallow: /.git/
+
+# Allow crawling of assets
+Allow: /assets/

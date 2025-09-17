@@ -1,0 +1,22 @@
+{
+  "name": "Crescentials Record",
+  "short_name": "Crescentials",
+  "description": "Crescentials Record - Create Music with Essentials. Independent music label in Indonesia since 2019.",
+  "icons": [
+    {
+      "src": "/assets/images/Crescentials Record - Favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ffd900",
+  "background_color": "#111111",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "id-ID",
+  "dir": "ltr",
+  "categories": ["music", "entertainment", "business"]
+}
