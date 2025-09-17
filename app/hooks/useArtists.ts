@@ -35,7 +35,7 @@ export function useArtist(id: number) {
 // Hook to preload artist images
 export function usePreloadArtistImages() {
   const queryClient = useQueryClient()
-  
+
   const preloadImages = async (artists: ArtistData) => {
     try {
       await artistService.preloadArtistImages(artists)
@@ -67,7 +67,7 @@ export function useArtistNavigation(currentIndex: number, totalArtists: number) 
   const prefetchAdjacentArtists = () => {
     const nextIndex = (currentIndex + 1) % totalArtists
     const prevIndex = (currentIndex - 1 + totalArtists) % totalArtists
-    
+
     prefetchArtist(nextIndex)
     prefetchArtist(prevIndex)
   }

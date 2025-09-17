@@ -11,11 +11,13 @@ export function ContactSection() {
     <>
       <div className="subtitle">Let&apos;s Create!</div>
       <h1>
-        Got a project in mind?<br />
-        Production, mix &amp; master, or a custom idea<br />
-        — I&apos;d love to hear from you.<br />
+        Got a project in mind?
+        <br />
+        Production, mix &amp; master, or a custom idea
+        <br />— I&apos;d love to hear from you.
+        <br />
       </h1>
-      
+
       <div className="contact-items">
         {/* Row 1 */}
         <div className="row">
@@ -23,7 +25,11 @@ export function ContactSection() {
             <i className="ri-mail-line"></i>
             <span>Email</span>
           </a>
-          <a href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer">
+          <a
+            href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <i className="ri-whatsapp-line"></i>
             <span>WhatsApp</span>
           </a>

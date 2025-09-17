@@ -26,11 +26,11 @@ export function AboutSection() {
       function initPhases() {
         phases = []
         shadowPhases = []
-        
+
         // On mobile, generate phases for full width; on desktop, only right half
         const isMobile = window.innerWidth <= 768
         const waveWidth = isMobile ? canvas.width : canvas.width / 2
-        
+
         for (let x = 0; x < waveWidth; x += waveResolution) {
           phases.push(Math.random() * Math.PI * 2)
           shadowPhases.push(Math.random() * Math.PI * 2)
@@ -47,15 +47,15 @@ export function AboutSection() {
         if (!ctx) return
 
         ctx.beginPath()
-        
+
         // On mobile, draw across full width; on desktop, only right half
         const isMobile = window.innerWidth <= 768
         const startX = isMobile ? 0 : canvas.width / 2
-        
+
         ctx.moveTo(startX, canvas.height / 2 + yOffset)
 
         for (let i = 0; i < phaseArray.length; i++) {
-          const x = startX + (i * waveResolution)
+          const x = startX + i * waveResolution
           const y =
             Math.sin(t + phaseArray[i]) *
             amplitude *
@@ -102,7 +102,7 @@ export function AboutSection() {
           return cleanup
         }
       }, 100)
-      
+
       return () => clearTimeout(timer)
     }
   }, [])
@@ -119,10 +119,15 @@ export function AboutSection() {
               className="about-img"
             />
             <p className="about-paragraph">
-              <span style={{ fontWeight: 'bold' }}>Crescentials Record</span>, a home-based music production studio since 2019, based in Indonesia, providing services for individuals who want to create their own single, as well as those who wish to develop their own EP/album.
+              <span style={{ fontWeight: 'bold' }}>Crescentials Record</span>, a home-based music
+              production studio since 2019, based in Indonesia, providing services for individuals
+              who want to create their own single, as well as those who wish to develop their own
+              EP/album.
             </p>
             <p className="about-paragraph">
-              <span style={{ fontWeight: 'bold' }}>We</span>, always aim to deliver the highest quality of music persona while maintaining affordable pricing for our services and packages.
+              <span style={{ fontWeight: 'bold' }}>We</span>, always aim to deliver the highest
+              quality of music persona while maintaining affordable pricing for our services and
+              packages.
             </p>
           </div>
         </div>

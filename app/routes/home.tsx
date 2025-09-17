@@ -24,7 +24,7 @@ export function meta(_: Route.MetaArgs) {
     { name: 'robots', content: 'index, follow' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     { name: 'theme-color', content: siteMetaData.primaryColor },
-    
+
     // Open Graph / Facebook
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: siteMetaData.title },
@@ -33,13 +33,13 @@ export function meta(_: Route.MetaArgs) {
     { property: 'og:url', content: 'https://crescentials-record.com' },
     { property: 'og:site_name', content: 'Crescentials Record' },
     { property: 'og:locale', content: 'id_ID' },
-    
+
     // Twitter Card
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: siteMetaData.title },
     { name: 'twitter:description', content: siteMetaData.description },
     { name: 'twitter:image', content: siteMetaData.ogImage },
-    
+
     // Additional SEO
     { name: 'application-name', content: 'Crescentials Record' },
     { name: 'apple-mobile-web-app-title', content: 'Crescentials Record' },
@@ -99,65 +99,76 @@ export default function Home() {
 
   // Structured data for SEO
   const structuredData = {
-    "@context": "https://schema.org",
-    "@graph": [
+    '@context': 'https://schema.org',
+    '@graph': [
       {
-        "@type": "Organization",
-        "@id": "https://crescentials-record.com/#organization",
-        "name": "Crescentials Record",
-        "url": "https://crescentials-record.com",
-        "logo": {
-          "@type": "ImageObject",
-          "url": siteMetaData.ogImage
+        '@type': 'Organization',
+        '@id': 'https://crescentials-record.com/#organization',
+        name: 'Crescentials Record',
+        url: 'https://crescentials-record.com',
+        logo: {
+          '@type': 'ImageObject',
+          url: siteMetaData.ogImage,
         },
-        "foundingDate": siteMetaData.established.toString(),
-        "description": siteMetaData.description,
-        "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "Indonesia"
+        foundingDate: siteMetaData.established.toString(),
+        description: siteMetaData.description,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: contactData.address,
+          addressCountry: 'Indonesia',
         },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer service",
-          "availableLanguage": ["Indonesian", "English"]
-        }
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: contactData.phone,
+          email: contactData.email,
+          contactType: 'customer service',
+          availableLanguage: ['Indonesian', 'English'],
+        },
       },
       {
-        "@type": "WebSite",
-        "@id": "https://crescentials-record.com/#website",
-        "url": "https://crescentials-record.com",
-        "name": "Crescentials Record",
-        "description": siteMetaData.description,
-        "publisher": {
-          "@id": "https://crescentials-record.com/#organization"
+        '@type': 'WebSite',
+        '@id': 'https://crescentials-record.com/#website',
+        url: 'https://crescentials-record.com',
+        name: 'Crescentials Record',
+        description: siteMetaData.description,
+        publisher: {
+          '@id': 'https://crescentials-record.com/#organization',
         },
-        "inLanguage": "id-ID"
+        inLanguage: 'id-ID',
       },
       {
-        "@type": "LocalBusiness",
-        "name": "Crescentials Record",
-        "image": siteMetaData.ogImage,
-        "description": siteMetaData.description,
-        "url": "https://crescentials-record.com",
-        "priceRange": "$$",
-        "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "Indonesia"
+        '@type': 'LocalBusiness',
+        name: 'Crescentials Record',
+        image: siteMetaData.ogImage,
+        description: siteMetaData.description,
+        url: 'https://crescentials-record.com',
+        telephone: contactData.phone,
+        email: contactData.email,
+        priceRange: '$$',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: contactData.address,
+          addressCountry: 'Indonesia',
         },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "100"
-        }
-      }
-    ]
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '5',
+          reviewCount: '100',
+        },
+        sameAs: [
+          contactData.social.instagram,
+          contactData.social.youtube,
+          contactData.social.spotify,
+        ],
+      },
+    ],
   }
 
   return (
     <SectionProvider>
       <div className="crescentials-app">
         {/* Structured Data */}
-        <script 
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />

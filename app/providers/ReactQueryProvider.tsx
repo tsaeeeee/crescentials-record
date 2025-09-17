@@ -14,7 +14,7 @@ export function ReactQueryProvider({ children }: { children: React.ReactNode }) 
             // Retry failed requests 2 times
             retry: 2,
             // Retry delay increases exponentially
-            retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+            retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
             // Don't refetch on window focus in development
             refetchOnWindowFocus: import.meta.env.PROD,
           },
@@ -22,7 +22,7 @@ export function ReactQueryProvider({ children }: { children: React.ReactNode }) 
             retry: 1,
           },
         },
-      })
+      }),
   )
 
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

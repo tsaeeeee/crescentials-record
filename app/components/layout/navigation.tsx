@@ -8,7 +8,7 @@ export const Navigation = () => {
   }
 
   return (
-    <nav className="nav" role="navigation" aria-label="Main navigation">
+    <nav className="nav" aria-label="Main navigation">
       <ul className="nav__list">
         <li>
           <a

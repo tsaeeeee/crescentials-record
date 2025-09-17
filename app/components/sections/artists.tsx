@@ -16,75 +16,74 @@ function ArtistContent({ artist }: ArtistContentProps) {
     spotify: 'ri-spotify-line',
   }
 
-  const updateContent = useCallback(
-    (newArtist: Artist) => {
-      if (!contentRef.current) return
+  const updateContent = useCallback((newArtist: Artist) => {
+    if (!contentRef.current) return
 
-      const detailsContainer = contentRef.current
+    const detailsContainer = contentRef.current
 
-      // Clean up existing iframes to prevent memory leaks
-      const existingIframes = detailsContainer.querySelectorAll('iframe')
-      existingIframes.forEach(iframe => {
-        iframe.src = 'about:blank'
-        iframe.remove()
+    // Clean up existing iframes to prevent memory leaks
+    const existingIframes = detailsContainer.querySelectorAll('iframe')
+    existingIframes.forEach(iframe => {
+      iframe.src = 'about:blank'
+      iframe.remove()
+    })
+
+    // Create content elements using DOM methods instead of innerHTML
+    const contentWrapper = document.createElement('div')
+
+    // Artist name
+    const artistName = document.createElement('h2')
+    artistName.textContent = newArtist.name
+    contentWrapper.appendChild(artistName)
+
+    // Artist bio
+    const artistBio = document.createElement('p')
+    artistBio.textContent = newArtist.bio
+    contentWrapper.appendChild(artistBio)
+
+    // Social links
+    const socialsContainer = document.createElement('div')
+    socialsContainer.className = 'socials'
+
+    Object.entries(newArtist.socials)
+      .filter(([, url]) => url)
+      .forEach(([platform, url]) => {
+        const socialLink = document.createElement('a')
+        socialLink.href = url || '#'
+        socialLink.target = '_blank'
+        socialLink.rel = 'noopener noreferrer'
+
+        const socialIcon = document.createElement('i')
+        socialIcon.className = iconMap[platform] || ''
+        socialLink.appendChild(socialIcon)
+
+        socialsContainer.appendChild(socialLink)
       })
 
-      // Create content elements using DOM methods instead of innerHTML
-      const contentWrapper = document.createElement('div')
+    contentWrapper.appendChild(socialsContainer)
 
-      // Artist name
-      const artistName = document.createElement('h2')
-      artistName.textContent = newArtist.name
-      contentWrapper.appendChild(artistName)
+    // Tracks section
+    if (newArtist.tracks && newArtist.tracks.length > 0) {
+      const releasesLabel = document.createElement('div')
+      releasesLabel.className = 'releases-label'
+      releasesLabel.textContent = 'Latest Releases'
+      releasesLabel.style.marginBottom = '20px'
+      contentWrapper.appendChild(releasesLabel)
 
-      // Artist bio
-      const artistBio = document.createElement('p')
-      artistBio.textContent = newArtist.bio
-      contentWrapper.appendChild(artistBio)
+      const tracksContainer = document.createElement('div')
+      tracksContainer.className = 'spotify-tracks'
 
-      // Social links
-      const socialsContainer = document.createElement('div')
-      socialsContainer.className = 'socials'
+      newArtist.tracks.forEach((track, trackIndex) => {
+        const trackWrapper = document.createElement('div')
+        trackWrapper.className = 'spotify-track-wrapper'
+        trackWrapper.style.opacity = '0'
+        trackWrapper.style.transform = 'translateY(20px)'
 
-      Object.entries(newArtist.socials)
-        .filter(([, url]) => url)
-        .forEach(([platform, url]) => {
-          const socialLink = document.createElement('a')
-          socialLink.href = url || '#'
-          socialLink.target = '_blank'
-          socialLink.rel = 'noopener noreferrer'
-
-          const socialIcon = document.createElement('i')
-          socialIcon.className = iconMap[platform] || ''
-          socialLink.appendChild(socialIcon)
-
-          socialsContainer.appendChild(socialLink)
-        })
-
-      contentWrapper.appendChild(socialsContainer)
-
-      // Tracks section
-      if (newArtist.tracks && newArtist.tracks.length > 0) {
-        const releasesLabel = document.createElement('div')
-        releasesLabel.className = 'releases-label'
-        releasesLabel.textContent = 'Latest Releases'
-        releasesLabel.style.marginBottom = '20px'
-        contentWrapper.appendChild(releasesLabel)
-
-        const tracksContainer = document.createElement('div')
-        tracksContainer.className = 'spotify-tracks'
-
-        newArtist.tracks.forEach((track, trackIndex) => {
-          const trackWrapper = document.createElement('div')
-          trackWrapper.className = 'spotify-track-wrapper'
-          trackWrapper.style.opacity = '0'
-          trackWrapper.style.transform = 'translateY(20px)'
-
-          // Create skeleton loader
-          const skeleton = document.createElement('div')
-          skeleton.className = 'spotify-skeleton'
-          skeleton.style.display = 'flex'
-          skeleton.innerHTML = `
+        // Create skeleton loader
+        const skeleton = document.createElement('div')
+        skeleton.className = 'spotify-skeleton'
+        skeleton.style.display = 'flex'
+        skeleton.innerHTML = `
           <div class="skeleton-album-art"></div>
           <div class="skeleton-details">
             <div class="skeleton-track-title"></div>
@@ -92,89 +91,87 @@ function ArtistContent({ artist }: ArtistContentProps) {
             <div class="skeleton-playback-bar"></div>
           </div>
         `
-          trackWrapper.appendChild(skeleton)
+        trackWrapper.appendChild(skeleton)
 
-          // Create iframe
-          const iframe = document.createElement('iframe')
-          iframe.src = track
-          iframe.width = '100%'
-          iframe.height = '152'
-          iframe.frameBorder = '0'
-          iframe.setAttribute('allowtransparency', 'true')
-          iframe.allow = 'encrypted-media'
-          iframe.title = `${newArtist.name} Track ${trackIndex + 1}`
-          iframe.loading = 'lazy'
-          iframe.style.opacity = '0'
-          iframe.style.transition = 'opacity 0.4s ease'
+        // Create iframe
+        const iframe = document.createElement('iframe')
+        iframe.src = track
+        iframe.width = '100%'
+        iframe.height = '152'
+        iframe.frameBorder = '0'
+        iframe.setAttribute('allowtransparency', 'true')
+        iframe.allow = 'encrypted-media'
+        iframe.title = `${newArtist.name} Track ${trackIndex + 1}`
+        iframe.loading = 'lazy'
+        iframe.style.opacity = '0'
+        iframe.style.transition = 'opacity 0.4s ease'
 
-          iframe.onload = () => {
-            iframe.style.opacity = '1'
-            skeleton.style.display = 'none'
-          }
+        iframe.onload = () => {
+          iframe.style.opacity = '1'
+          skeleton.style.display = 'none'
+        }
 
-          iframe.onerror = () => {
-            console.warn(`Failed to load Spotify track: ${track}`)
-            skeleton.style.display = 'none'
-            trackWrapper.style.display = 'none'
-          }
+        iframe.onerror = () => {
+          console.warn(`Failed to load Spotify track: ${track}`)
+          skeleton.style.display = 'none'
+          trackWrapper.style.display = 'none'
+        }
 
-          trackWrapper.appendChild(iframe)
-          tracksContainer.appendChild(trackWrapper)
-        })
+        trackWrapper.appendChild(iframe)
+        tracksContainer.appendChild(trackWrapper)
+      })
 
-        contentWrapper.appendChild(tracksContainer)
-      }
+      contentWrapper.appendChild(tracksContainer)
+    }
 
-      // Animate content transition
-      const currentElements = detailsContainer.querySelectorAll(
-        'h2, p, .socials, .releases-label, .spotify-track-wrapper',
-      )
+    // Animate content transition
+    const currentElements = detailsContainer.querySelectorAll(
+      'h2, p, .socials, .releases-label, .spotify-track-wrapper',
+    )
 
-      if (currentElements.length > 0) {
-        gsap.to(currentElements, {
-          opacity: 0,
-          y: -10,
-          duration: 0.15,
-          ease: 'power2.in',
-          onComplete: () => {
-            detailsContainer.innerHTML = ''
-            detailsContainer.appendChild(contentWrapper)
-            animateNewContent()
-          },
-        })
-      } else {
-        detailsContainer.innerHTML = ''
-        detailsContainer.appendChild(contentWrapper)
-        animateNewContent()
-      }
+    if (currentElements.length > 0) {
+      gsap.to(currentElements, {
+        opacity: 0,
+        y: -10,
+        duration: 0.15,
+        ease: 'power2.in',
+        onComplete: () => {
+          detailsContainer.innerHTML = ''
+          detailsContainer.appendChild(contentWrapper)
+          animateNewContent()
+        },
+      })
+    } else {
+      detailsContainer.innerHTML = ''
+      detailsContainer.appendChild(contentWrapper)
+      animateNewContent()
+    }
 
-      function animateNewContent() {
-        const textElements = detailsContainer.querySelectorAll('h2, p, .socials, .releases-label')
-        const spotifyWrappers = detailsContainer.querySelectorAll('.spotify-track-wrapper')
+    function animateNewContent() {
+      const textElements = detailsContainer.querySelectorAll('h2, p, .socials, .releases-label')
+      const spotifyWrappers = detailsContainer.querySelectorAll('.spotify-track-wrapper')
 
-        gsap.set(textElements, { opacity: 0, y: 20 })
-        gsap.set(spotifyWrappers, { opacity: 0, y: 30 })
+      gsap.set(textElements, { opacity: 0, y: 20 })
+      gsap.set(spotifyWrappers, { opacity: 0, y: 30 })
 
-        gsap.to(textElements, {
-          opacity: 1,
-          y: 0,
-          duration: 0.3,
-          stagger: 0.05,
-          ease: 'power2.out',
-        })
+      gsap.to(textElements, {
+        opacity: 1,
+        y: 0,
+        duration: 0.3,
+        stagger: 0.05,
+        ease: 'power2.out',
+      })
 
-        gsap.to(spotifyWrappers, {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          stagger: 0.1,
-          delay: 0.2,
-          ease: 'power2.out',
-        })
-      }
-    },
-    [],
-  )
+      gsap.to(spotifyWrappers, {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        stagger: 0.1,
+        delay: 0.2,
+        ease: 'power2.out',
+      })
+    }
+  }, [])
 
   // Initialize content when component mounts or artist changes
   useEffect(() => {
@@ -254,11 +251,16 @@ export function ArtistsSection() {
         // Clean any leftover styles and classes, ensure proper initial state
         images.forEach((img, index) => {
           // Remove all transition classes
-          img.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right')
+          img.classList.remove(
+            'slide-out-left',
+            'slide-out-right',
+            'slide-in-left',
+            'slide-in-right',
+          )
           // Remove inline styles
           img.style.transform = ''
           img.style.opacity = ''
-          
+
           if (index === 0) {
             img.classList.add('active')
           } else {
@@ -293,7 +295,7 @@ export function ArtistsSection() {
         if (current && next) {
           // Remove active class from current image
           current.classList.remove('active')
-          
+
           // Add slide-out class to current image
           const slideOutClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right'
           current.classList.add(slideOutClass)
@@ -382,5 +384,4 @@ export function ArtistsSection() {
       </div>
     </div>
   )
-
 }

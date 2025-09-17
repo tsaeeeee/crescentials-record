@@ -1,8 +1,7 @@
 import type { Artist, ArtistData } from '~/types/artist'
 
 // Simulate API delay for realistic caching behavior
-const simulateNetworkDelay = (ms: number = 100) => 
-  new Promise(resolve => setTimeout(resolve, ms))
+const simulateNetworkDelay = (ms: number = 100) => new Promise(resolve => setTimeout(resolve, ms))
 
 export class ArtistService {
   private static instance: ArtistService
@@ -22,22 +21,24 @@ export class ArtistService {
     try {
       // Import the JSON data statically
       const { default: artistsData } = await import('~/data/artists.json')
-      
+
       // Validate and transform the data if needed
-      const validatedData: ArtistData = (artistsData as unknown[]).map((artist: unknown): Artist => {
-        const artistObj = artist as Record<string, unknown>
-        return {
-          name: (artistObj.name as string) || 'Unknown Artist',
-          bio: (artistObj.bio as string) || 'No bio available',
-          image: (artistObj.image as string) || '/assets/images/default-artist.png',
-          socials: {
-            instagram: (artistObj.socials as Record<string, unknown>)?.instagram as string,
-            spotify: (artistObj.socials as Record<string, unknown>)?.spotify as string,
-            youtube: (artistObj.socials as Record<string, unknown>)?.youtube as string,
-          },
-          tracks: Array.isArray(artistObj.tracks) ? (artistObj.tracks as string[]) : [],
-        }
-      })
+      const validatedData: ArtistData = (artistsData as unknown[]).map(
+        (artist: unknown): Artist => {
+          const artistObj = artist as Record<string, unknown>
+          return {
+            name: (artistObj.name as string) || 'Unknown Artist',
+            bio: (artistObj.bio as string) || 'No bio available',
+            image: (artistObj.image as string) || '/assets/images/default-artist.png',
+            socials: {
+              instagram: (artistObj.socials as Record<string, unknown>)?.instagram as string,
+              spotify: (artistObj.socials as Record<string, unknown>)?.spotify as string,
+              youtube: (artistObj.socials as Record<string, unknown>)?.youtube as string,
+            },
+            tracks: Array.isArray(artistObj.tracks) ? (artistObj.tracks as string[]) : [],
+          }
+        },
+      )
 
       this.cachedData = validatedData
       return validatedData
@@ -54,8 +55,8 @@ export class ArtistService {
 
   // Preload images for better performance
   async preloadArtistImages(artists: ArtistData): Promise<void> {
-    const imagePromises = artists.map((artist) => {
-      return new Promise<void>((resolve) => {
+    const imagePromises = artists.map(artist => {
+      return new Promise<void>(resolve => {
         const img = new Image()
         img.onload = () => resolve()
         img.onerror = () => resolve() // Continue even if image fails
