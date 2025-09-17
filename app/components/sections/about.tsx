@@ -119,15 +119,10 @@ export function AboutSection() {
               className="about-img"
             />
             <p className="about-paragraph">
-              Crescentials Record adalah label musik independen yang berdedikasi untuk menghadirkan
-              artis-artis berbakat dengan suara autentik dan inovatif. Kami berkomitmen untuk
-              mendukung kreativitas musisi dalam mengekspresikan karya mereka, mulai dari proses
-              produksi hingga distribusi yang luas.
+              <span style={{ fontWeight: 'bold' }}>Crescentials Record</span>, a home-based music production studio since 2019, based in Indonesia, providing services for individuals who want to create their own single, as well as those who wish to develop their own EP/album.
             </p>
             <p className="about-paragraph">
-              Dengan pengalaman dan passion di industri musik, Crescentials Record menjadi jembatan
-              antara artis dan pendengar, menciptakan pengalaman musik yang bermakna dan berkesan
-              untuk semua kalangan.
+              <span style={{ fontWeight: 'bold' }}>We</span>, always aim to deliver the highest quality of music persona while maintaining affordable pricing for our services and packages.
             </p>
           </div>
         </div>

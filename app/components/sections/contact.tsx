@@ -1,66 +1,52 @@
+import { useContact } from '../../hooks/useContact'
+
 export function ContactSection() {
-  const contactLinks = [
-    {
-      text: 'WhatsApp',
-      href: 'https://wa.me/6281234567890',
-      icon: 'ri-whatsapp-line'
-    },
-    {
-      text: 'Instagram',
-      href: 'https://instagram.com/crescentials',
-      icon: 'ri-instagram-line'
-    },
-    {
-      text: 'Email',
-      href: 'mailto:contact@crescentials.com',
-      icon: 'ri-mail-line'
-    },
-    {
-      text: 'YouTube',
-      href: 'https://youtube.com/@crescentials',
-      icon: 'ri-youtube-line'
-    },
-    {
-      text: 'Spotify',
-      href: 'https://open.spotify.com/artist/crescentials',
-      icon: 'ri-spotify-line'
-    }
-  ]
+  const { contact, loading, error } = useContact()
+
+  if (loading) return <div>Loading contact information...</div>
+  if (error) return <div>Error loading contact: {error}</div>
+  if (!contact) return <div>No contact information available</div>
 
   return (
     <>
-      <div className="subtitle">Ready to create?</div>
-      <h1>Let&apos;s make music together.</h1>
+      <div className="subtitle">Let&apos;s Create!</div>
+      <h1>
+        Got a project in mind?<br />
+        Production, mix &amp; master, or a custom idea<br />
+        — I&apos;d love to hear from you.<br />
+      </h1>
       
       <div className="contact-items">
+        {/* Row 1 */}
         <div className="row">
-          <a href={contactLinks[0].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[0].icon}></i>
-            <span>{contactLinks[0].text}</span>
+          <a href={`mailto:${contact.email}`}>
+            <i className="ri-mail-line"></i>
+            <span>Email</span>
           </a>
-          <a href={contactLinks[1].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[1].icon}></i>
-            <span>{contactLinks[1].text}</span>
-          </a>
-          <a href={contactLinks[2].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[2].icon}></i>
-            <span>{contactLinks[2].text}</span>
+          <a href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer">
+            <i className="ri-whatsapp-line"></i>
+            <span>WhatsApp</span>
           </a>
         </div>
+        {/* Row 2 */}
         <div className="row">
-          <a href={contactLinks[3].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[3].icon}></i>
-            <span>{contactLinks[3].text}</span>
+          <a href={contact.social.instagram} target="_blank" rel="noopener noreferrer">
+            <i className="ri-instagram-line"></i>
+            <span>Instagram</span>
           </a>
-          <a href={contactLinks[4].href} target="_blank" rel="noopener noreferrer">
-            <i className={contactLinks[4].icon}></i>
-            <span>{contactLinks[4].text}</span>
+          <a href={contact.social.youtube} target="_blank" rel="noopener noreferrer">
+            <i className="ri-youtube-line"></i>
+            <span>YouTube</span>
+          </a>
+          <a href={contact.social.spotify} target="_blank" rel="noopener noreferrer">
+            <i className="ri-spotify-line"></i>
+            <span>Spotify</span>
           </a>
         </div>
       </div>
 
       <div className="footer">
-        © 2025 Crescentials Record. All rights reserved.
+        © <span>{new Date().getFullYear()}</span> Crescentials Record. All rights reserved.
       </div>
     </>
   )

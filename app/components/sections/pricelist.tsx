@@ -1,29 +1,23 @@
 import { gsap } from 'gsap'
 import { useEffect, useRef } from 'react'
+import { usePricelist } from '~/hooks/usePricelist'
 
 export function PricelistSection() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { pricelist, loading, error } = usePricelist()
 
   useEffect(() => {
     const container = containerRef.current
-    if (!container) return
+    if (!container || loading || error || !pricelist.length) return
 
-    // Create the new structure with fixed viewport
     container.innerHTML = `
       <div class="left">
         <div class="title-zone">
           <div class="title">Pick Your Packages</div>
         </div>
         <div class="picker-zone">
-          <div class="picker">
-            <div class="picker-viewport">
-              <div class="picker-list" id="picker-list">
-                <div class="picker-item">Full Package</div>
-                <div class="picker-item">Compose Only</div>
-                <div class="picker-item">Mix & Master</div>
-                <div class="picker-item">Live Sequencer Set</div>
-              </div>
-            </div>
+          <div class="picker" id="picker">
+            ${pricelist.map(item => `<div class="picker-item">${item.name}</div>`).join('')}
           </div>
         </div>
       </div>
@@ -37,58 +31,18 @@ export function PricelistSection() {
       </div>
     `
 
-    const pickerList = document.getElementById('picker-list')
+    const picker = document.getElementById('picker')
     const items = Array.from(document.querySelectorAll('.picker-item')) as HTMLElement[]
     const detailsBox = document.getElementById('details')
     const notes = document.getElementById('notes')
 
-    const detailsData = [
-      {
-        price: 'IDR 1,25Mio',
-        points: [
-          'Bring your own demo',
-          'Any genre and instruments',
-          'Include <span>mixing and mastering service</span>',
-          'Get separated stems',
-          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
-          'Support until releases process (Optional)',
-          '<span>Promo Toolkit</span> (By Request)',
-        ],
-      },
-      {
-        price: 'IDR 850K',
-        points: [
-          'Bring your own demo',
-          'Any genre and instruments',
-          'Get separated stems',
-          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
-        ],
-      },
-      {
-        price: 'IDR 650K',
-        points: [
-          'Bring your own stems',
-          'Any genre and instruments',
-          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
-        ],
-      },
-      {
-        price: 'IDR 450K',
-        points: [
-          'Any songs, any genre and instruments',
-          'Include cue and guide',
-          'Get separated file stems',
-          'Get <span>5x revision</span> (Additional would be charged <span>IDR 75K</span>)',
-        ],
-      },
-    ]
+    const detailsData = pricelist.map(item => ({
+      price: item.price.display,
+      points: item.features,
+    }))
 
     let currentIndex = 0
     let isAnimating = false
-
-    const getItemHeight = () => {
-      return window.innerWidth <= 1024 ? 75 : 100
-    }
 
     function updatePicker() {
       items.forEach((item, i) => {
@@ -107,33 +61,6 @@ export function PricelistSection() {
           item.style.transform = 'scale(0.9)'
         }
       })
-
-      const titleZone = document.querySelector('.title-zone') as HTMLElement
-      if (titleZone && window.innerWidth <= 1024) {
-        if (currentIndex === 0) {
-          titleZone.classList.remove('hidden')
-        } else {
-          titleZone.classList.add('hidden')
-        }
-      }
-
-      if (pickerList) {
-        // Desktop: Use GSAP animation of entire picker for smoothness
-        // Mobile: Use viewport positioning with transform
-        if (window.innerWidth <= 1024) {
-          const itemHeight = getItemHeight()
-          const offset = -(currentIndex - 1) * itemHeight
-          pickerList.style.transform = `translateY(${offset}px)`
-        } else {
-          // Desktop: Animate with GSAP for smooth movement
-          // Adjust offset to center items better - use smaller spacing
-          gsap.to(pickerList, {
-            y: -currentIndex * 90,
-            duration: 0.4,
-            ease: 'power3.out',
-          })
-        }
-      }
     }
 
     function updateDetails(index: number) {
@@ -173,18 +100,33 @@ export function PricelistSection() {
         currentIndex = newIndex
         isAnimating = true
         updateDetails(currentIndex)
+        if (picker) {
+          gsap.to(picker, {
+            y: -currentIndex * 115,
+            duration: 0.4,
+            ease: 'power3.out',
+            onUpdate: updatePicker,
+            onComplete: () => {
+              isAnimating = false
+            },
+          })
+        }
+      }
+    }
 
-        if (window.innerWidth <= 1024) {
-          // Mobile: Instant update with CSS transform
-          updatePicker()
-          setTimeout(() => {
-            isAnimating = false
-          }, 400)
-        } else {
-          // Desktop: Smooth GSAP animation
-          if (pickerList) {
-            gsap.to(pickerList, {
-              y: -currentIndex * 90,
+    window.addEventListener('wheel', (e: WheelEvent) => {
+      if (e.deltaY > 0) movePicker(1)
+      else movePicker(-1)
+    })
+
+    items.forEach((item, i) => {
+      item.addEventListener('click', () => {
+        if (i !== currentIndex) {
+          currentIndex = i
+          updateDetails(currentIndex)
+          if (picker) {
+            gsap.to(picker, {
+              y: -currentIndex * 100,
               duration: 0.4,
               ease: 'power3.out',
               onUpdate: updatePicker,
@@ -192,61 +134,6 @@ export function PricelistSection() {
                 isAnimating = false
               },
             })
-          } else {
-            updatePicker()
-            setTimeout(() => {
-              isAnimating = false
-            }, 400)
-          }
-        }
-      }
-    }
-
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 0) movePicker(1)
-      else movePicker(-1)
-    }
-
-    const handleResize = () => {
-      const titleZone = document.querySelector('.title-zone') as HTMLElement
-      if (titleZone) {
-        if (window.innerWidth > 1024) {
-          titleZone.classList.remove('hidden')
-        } else {
-          if (currentIndex === 0) {
-            titleZone.classList.remove('hidden')
-          } else {
-            titleZone.classList.add('hidden')
-          }
-        }
-      }
-      updatePicker()
-    }
-
-    window.addEventListener('wheel', handleWheel)
-    window.addEventListener('resize', handleResize)
-
-    items.forEach((item, i) => {
-      item.addEventListener('click', () => {
-        if (i !== currentIndex) {
-          currentIndex = i
-          updateDetails(currentIndex)
-
-          if (window.innerWidth <= 1024) {
-            // Mobile: Instant update
-            updatePicker()
-          } else {
-            // Desktop: Smooth GSAP animation
-            if (pickerList) {
-              gsap.to(pickerList, {
-                y: -currentIndex * 90,
-                duration: 0.4,
-                ease: 'power3.out',
-                onUpdate: updatePicker,
-              })
-            } else {
-              updatePicker()
-            }
           }
         }
       })
@@ -262,12 +149,10 @@ export function PricelistSection() {
         { opacity: 0.9, y: 0, duration: 1, ease: 'power2.out', delay: 0.5 },
       )
     }
+  }, [pricelist, loading, error])
 
-    return () => {
-      window.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  if (loading) return <div>Loading pricing information...</div>
+  if (error) return <div>Error loading pricing: {error}</div>
 
   return <div ref={containerRef} className="pricelist-container" />
 }
