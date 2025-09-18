@@ -1,16 +1,14 @@
-# -------------------------
-# Stage 1: Build React App
-# -------------------------
-FROM node:20-alpine AS build
+# Use official Node.js 22 image
+FROM node:22.19.0-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml* ./
+# Install pnpm globally
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Install pnpm
-RUN npm install -g pnpm
+# Copy only the lockfile and package.json first for better cache
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -21,20 +19,8 @@ COPY . .
 # Build the app
 RUN pnpm build
 
-# -------------------------
-# Stage 2: Run with Nginx
-# -------------------------
-FROM nginx:stable-alpine
+# Expose the port your app runs on (default for react-router-serve is 3000)
+EXPOSE 3000
 
-# Remove default nginx static assets
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy built files from previous stage
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port
-EXPOSE 80
-
-# Run nginx
-CMD ["nginx", "-g", "daemon off;"]
-
+# Start the server
+CMD ["pnpm", "start"]
