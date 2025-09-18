@@ -150,16 +150,24 @@ main {
 }
 .nav__link {
   position: relative;
-  display: inline-flex;
-  padding: 2px;
   border-radius: 50%;
-  transition: background 0.4s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 }
-.nav__link.active-link {
+
+.active-link {
   background-color: var(--white-color);
-}
-.nav__link.active-link i {
-  color: var(--first-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 }
 .nav__link i {
   font-size: 1.5rem;

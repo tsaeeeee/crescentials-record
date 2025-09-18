@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '~/components/ui/carousel' // Adjust this path to match your project
 import { useArtistNavigation, useArtists, usePreloadArtistImages } from '~/hooks/useArtists'
 import type { Artist } from '~/types/artist'
 import gsap from '~/utils/gsap-config'
@@ -218,14 +219,37 @@ function ArtistState({ type, message }: ArtistStateProps) {
 
 export function ArtistsSection() {
   const [currentArtist, setCurrentArtist] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [lastNavigationTime, setLastNavigationTime] = useState(0)
-  const navigationThrottle = 800
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>()
 
   // React Query hooks
   const { data: artists, isLoading, error } = useArtists()
   const { preloadImages } = usePreloadArtistImages()
   const { prefetchAdjacentArtists } = useArtistNavigation(currentArtist, artists?.length || 0)
+
+  // Carousel API setup - syncs image carousel with content
+  useEffect(() => {
+    if (!carouselApi) return
+
+    const handleSelect = () => {
+      const selected = carouselApi.selectedScrollSnap()
+      if (selected !== currentArtist) {
+        setCurrentArtist(selected)
+      }
+    }
+
+    carouselApi.on('select', handleSelect)
+
+    return () => {
+      carouselApi.off('select', handleSelect)
+    }
+  }, [carouselApi, currentArtist])
+
+  // Update content when currentArtist changes (keeps existing behavior)
+  useEffect(() => {
+    if (artists?.[currentArtist]) {
+      // Content will update via the ArtistContent component's useEffect
+    }
+  }, [currentArtist, artists])
 
   // Preload images when artists data is available
   useEffect(() => {
@@ -242,87 +266,18 @@ export function ArtistsSection() {
     }
   }, [artists, prefetchAdjacentArtists])
 
-  // Initialize image positioning and clean transforms on mount
-  useEffect(() => {
-    if (artists?.length) {
-      const imageContainer = document.querySelector('.artist-image-container')
-      if (imageContainer) {
-        const images = imageContainer.querySelectorAll('img')
-        // Clean any leftover styles and classes, ensure proper initial state
-        images.forEach((img, index) => {
-          // Remove all transition classes
-          img.classList.remove(
-            'slide-out-left',
-            'slide-out-right',
-            'slide-in-left',
-            'slide-in-right',
-          )
-          // Remove inline styles
-          img.style.transform = ''
-          img.style.opacity = ''
-
-          if (index === 0) {
-            img.classList.add('active')
-          } else {
-            img.classList.remove('active')
-          }
-        })
-      }
-    }
-  }, [artists])
-
+  // Navigation function for keyboard controls - simplified
   const navigate = useCallback(
     (direction: 'next' | 'prev') => {
-      const now = Date.now()
-      if (now - lastNavigationTime < navigationThrottle || isTransitioning || !artists?.length)
-        return
+      if (!carouselApi || !artists?.length) return
 
-      setIsTransitioning(true)
-      setLastNavigationTime(now)
-
-      const newIndex =
-        direction === 'next'
-          ? (currentArtist + 1) % artists.length
-          : (currentArtist - 1 + artists.length) % artists.length
-
-      // Use CSS classes for smooth carousel transitions
-      const imageContainer = document.querySelector('.artist-image-container')
-      if (imageContainer) {
-        const images = imageContainer.querySelectorAll('img')
-        const current = images[currentArtist]
-        const next = images[newIndex]
-
-        if (current && next) {
-          // Remove active class from current image
-          current.classList.remove('active')
-
-          // Add slide-out class to current image
-          const slideOutClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right'
-          current.classList.add(slideOutClass)
-
-          // Position next image off-screen in the correct direction before sliding in
-          const slideInClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left'
-          next.classList.remove('active') // Ensure it's not active
-          next.classList.add(slideInClass) // Position it off-screen
-
-          // Use requestAnimationFrame for smooth transition
-          requestAnimationFrame(() => {
-            // Remove slide-in class and add active class to trigger slide-in animation
-            next.classList.remove(slideInClass)
-            next.classList.add('active')
-          })
-
-          // Clean up classes after transition completes
-          setTimeout(() => {
-            current.classList.remove(slideOutClass)
-            setIsTransitioning(false)
-          }, 600) // Match CSS transition duration
-        }
+      if (direction === 'next') {
+        carouselApi.scrollNext()
+      } else {
+        carouselApi.scrollPrev()
       }
-
-      setCurrentArtist(newIndex)
     },
-    [currentArtist, lastNavigationTime, isTransitioning, artists],
+    [carouselApi, artists],
   )
 
   // Keyboard navigation
@@ -348,39 +303,43 @@ export function ArtistsSection() {
         <ArtistContent artist={artists[currentArtist]} />
       </div>
 
-      {/* Right Panel - Artist Images */}
+      {/* Right Panel - Artist Images with Carousel */}
       <div className="artist-right">
-        <div className="artist-image-container">
-          {artists.map((artist, index) => (
-            <img
-              key={`${artist.name}-${index}`}
-              src={artist.image}
-              alt={artist.name}
-              className={index === currentArtist ? 'active' : ''}
-            />
-          ))}
-        </div>{' '}
-        {/* Navigation */}
-        <div className="artist-nav">
-          <button
-            type="button"
-            onClick={() => navigate('prev')}
-            disabled={isTransitioning}
-            aria-label="Previous Artist"
-            style={{ opacity: isTransitioning ? 0.5 : 1 }}
-          >
-            <i className="ri-arrow-left-s-line"></i>
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('next')}
-            disabled={isTransitioning}
-            aria-label="Next Artist"
-            style={{ opacity: isTransitioning ? 0.5 : 1 }}
-          >
-            <i className="ri-arrow-right-s-line"></i>
-          </button>
-        </div>
+        <Carousel
+          className="artist-image-carousel"
+          setApi={setCarouselApi}
+          opts={{
+            loop: true,
+          }}
+        >
+          <CarouselContent className="artist-carousel-content">
+            {artists.map((artist, index) => (
+              <CarouselItem key={`${artist.name}-${index}`} className="artist-carousel-item">
+                <img src={artist.image} alt={artist.name} className="artist-carousel-image" />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+
+          {/* Custom navigation buttons that match your original design */}
+          <div className="artist-nav">
+            <button
+              type="button"
+              onClick={() => navigate('prev')}
+              aria-label="Previous Artist"
+              className="artist-nav-btn artist-nav-prev"
+            >
+              <i className="ri-arrow-left-s-line"></i>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('next')}
+              aria-label="Next Artist"
+              className="artist-nav-btn artist-nav-next"
+            >
+              <i className="ri-arrow-right-s-line"></i>
+            </button>
+          </div>
+        </Carousel>
       </div>
     </div>
   )
