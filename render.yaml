@@ -1,12 +1,8 @@
-services:
   - type: web
-    name: crescentials-record
-    env: static
-    buildCommand: pnpm install && pnpm build
-    staticPublishPath: ./dist
+    name: crescentials-record # Name of the service in Render dashboard
+    runtime: docker
+    dockerfilePath: ./Dockerfile # Dockerfile path is relative to the root of the repo
+    dockerContext: .
     plan: free
     region: singapore
-    envVars:
-      - key: NODE_VERSION
-        value: 22.19.0
-
+    env: node
