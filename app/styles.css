@@ -181,7 +181,8 @@ main {
 .nav__name {
   position: absolute;
   top: 0;
-  transform: translateX(56px);
+  left: 8px;
+  transform: translateX(-10px);
   background-color: var(--first-color);
   color: var(--white-color);
   font-size: var(--small-font-size);
