@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: crescentials-record
+    env: static
+    buildCommand: pnpm install && pnpm build
+    staticPublishPath: ./dist
+    plan: free
+    region: singapore
+    envVars:
+      - key: NODE_VERSION
+        value: 22.19.0
+
