@@ -118,7 +118,7 @@ export const LandingSection = () => {
     <>
       <div className="logo-container">
         <h1 className="tagline" id={taglineId} ref={taglineRef}>
-          <span className="tagline-line">Create Music</span>
+          <span className="tagline-line">Create Music </span>
           <span className="tagline-line">with Essentials.</span>
         </h1>
       </div>
