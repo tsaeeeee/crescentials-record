@@ -118,6 +118,7 @@ export function AboutSection() {
               alt="Crescentials Record Logo"
               className="about-img"
             />
+            <br></br>
             <p className="about-paragraph">
               <span style={{ fontWeight: 'bold' }}>Crescentials Record</span>, a home-based music
               production studio since 2019, based in Indonesia, providing services for individuals
