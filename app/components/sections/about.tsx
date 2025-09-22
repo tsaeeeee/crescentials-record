@@ -129,6 +129,9 @@ export function AboutSection() {
               quality of music persona while maintaining affordable pricing for our services and
               packages.
             </p>
+            <p className="about-paragraph">
+              <span style={{ fontWeight: 'bold' }}>Our</span> expertise covers a wide range of genres — from Electronic, various styles of Pop, Hip-hop/Rap, Folk, and Jazz, to experimental sounds tailored to your own unique identity.
+            </p>
           </div>
         </div>
       </div>
